@@ -80,6 +80,8 @@ plugins=(
     history-substring-search
     colored-man-pages
     git
+    tmux
+    vi-mode
 #    zsh-autosuggestions
     zsh-syntax-highlighting
 )
@@ -113,6 +115,14 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias config='/usr/bin/git --git-dir=/home/dadams/.cfg/ --work-tree=/home/dadams'
+#color ls things
+alias ll='colorls -la'
+alias lsg='colorls --gs -l'
+alias ls='colorls'
+alias lst='ls --tree'
+#for ruby install
+PATH="$PATH:$(ruby -e 'puts Gem.user_dir')/bin"
+
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
