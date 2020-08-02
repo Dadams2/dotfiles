@@ -112,11 +112,13 @@ source $ZSH/oh-my-zsh.sh
 # For a full list of active aliases, run `alias`.
 #
 # Example aliases
+alias vim='nvim'
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias config='/usr/bin/git --git-dir=/home/dadams/.cfg/ --work-tree=/home/dadams'
 #color ls things
 alias ll='colorls -la'
+alias la='colorls -a'
 alias lsg='colorls --gs -l'
 alias ls='colorls'
 alias lst='ls --tree'
