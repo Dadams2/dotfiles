@@ -1,4 +1,4 @@
-call plug#begin('~/.vim/plugged')
+call plug#begin('~/.config/nvim/plugged')
 
 " Airline
 Plug 'vim-airline/vim-airline'
@@ -11,7 +11,7 @@ Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 Plug 'ryanoasis/vim-devicons'
 "file finding
 Plug 'ctrlpvim/ctrlp.vim' " fuzzy find files
-
+Plug 'jiangmiao/auto-pairs'
 "for tmux finding
 Plug 'christoomey/vim-tmux-navigator'
 
@@ -30,6 +30,9 @@ vmap ++ <plug>NERDCommenterToggle
 nmap ++ <plug>NERDCommenterToggle
 
 inoremap jk <ESC>
+"for buffer navigation
+:nnoremap <Tab> :bnext<CR>
+:nnoremap <S-Tab> :bprevious<CR>
 :let mapleader=" "
 :syntax on
 :set wildmenu
@@ -37,7 +40,7 @@ inoremap jk <ESC>
 :set clipboard=unnamedplus
 
 "reload config
-nnoremap <C-s> :source ~/.vimrc<CR>
+nnoremap <C-s> :source ~/.config/nvim/init.vim<CR>
 
 "tab settings
 set shiftwidth=4 autoindent smartindent tabstop=4 softtabstop=4 expandtab 
