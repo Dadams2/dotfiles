@@ -124,7 +124,7 @@ alias ls='colorls'
 alias lst='ls --tree'
 #for ruby install
 PATH="$PATH:$(ruby -e 'puts Gem.user_dir')/bin"
-
+PATH="$PATH:~/.emacs.d/bin"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
