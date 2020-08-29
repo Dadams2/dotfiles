@@ -80,6 +80,7 @@ plugins=(
     history-substring-search
     colored-man-pages
     git
+    autojump
     tmux
     vi-mode
 #    zsh-autosuggestions
@@ -131,9 +132,9 @@ PATH="$PATH:$HOME/.emacs.d/bin"
 
 #more aliases
 alias rr='curl -s -L https://raw.githubusercontent.com/keroserene/rickrollrc/master/roll.sh | bash'
-
-
+alias lorem="curl https://gist.githubusercontent.com/eddie-atkinson/b502aae2dc358635faf67c51e95eab06/raw/f7b5c5be68a3daf9892167513840d435bef3e3bb/lorem.txt"
 #node version manager
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+

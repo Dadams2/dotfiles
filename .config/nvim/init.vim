@@ -67,6 +67,8 @@ set shiftwidth=4 autoindent smartindent tabstop=4 softtabstop=4 expandtab
 :  autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
 :augroup END
 
+"mouse options
+:set mouse=a
 
 "better uses for arrow keys
 nnoremap <Up> :resize +2<CR> 
