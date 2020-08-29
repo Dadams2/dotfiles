@@ -1,0 +1,46 @@
+# Nord themed dark color settings for colorls
+#
+# Main Colors
+unrecognized_file: '#3b4252'
+recognized_file:   '#a3be8c'
+dir:               '#5e81ac'
+
+# Link
+dead_link: '#bf616a'
+link:      '#5e81ac'
+
+# special files
+socket:    '#a3be8c'
+blockdev:  '#a3be8c'
+chardev:   '#a3be8c'
+
+# Access Modes
+write:     '#88c0d0'
+read:      '#5e81ac'
+exec:      '#5e81ac'
+no_access: '#bf616a'
+
+# Age
+hour_old:    '#88c0d0'
+day_old:     '#81a1c1'
+no_modifier: '#5e81ac'
+
+# File Size
+file_large:  '#bf616a'
+file_medium: '#d08770'
+file_small:  '#ebcb8b'
+
+# Random
+report: '#ebcb8b'
+user:   '#8fbcbb'
+tree:   '#3b4252'
+empty:  '#2e3440'
+error:  '#bf616a'
+normal: '#4c566a'
+
+# Git
+addition:     '#b48ead'
+modification: '#ebcb8b'
+deletion:     '#bf616a'
+untracked:    '#d08770'
+unchanged:    '#a3be8c'
