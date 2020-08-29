@@ -124,11 +124,16 @@ alias ls='colorls'
 alias lst='ls --tree'
 #for ruby install
 PATH="$PATH:$(ruby -e 'puts Gem.user_dir')/bin"
-PATH="$PATH:~/.emacs.d/bin"
-
+PATH="$PATH:$HOME/.emacs.d/bin"
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 
 #more aliases
 alias rr='curl -s -L https://raw.githubusercontent.com/keroserene/rickrollrc/master/roll.sh | bash'
+
+
+#node version manager
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
