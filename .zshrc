@@ -142,3 +142,4 @@ export NVM_DIR="$HOME/.nvm"
 #copy and pasting 
 alias copy='xclip -se c'
 alias paste='xclip -o'
+

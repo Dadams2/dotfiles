@@ -292,6 +292,12 @@ live_config_reload: true
 #   args:
 #     - --login
 
+shell:
+  program: /bin/zsh
+  args:
+    - -l
+    - -c
+    - "tmux new -s default"
 # Key bindings
 #
 # Each binding is defined as an object with some properties. Most of the
