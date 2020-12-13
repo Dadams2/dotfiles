@@ -118,8 +118,6 @@ shopt -s histappend
 # # usage: ex <file>
 ex ()
 {
-  if [ -f $1 ] ; then
-    case $1 in
       *.tar.bz2)   tar xjf $1   ;;
       *.tar.gz)    tar xzf $1   ;;
       *.bz2)       bunzip2 $1   ;;
@@ -138,7 +136,7 @@ ex ()
   fi
 }
 
-# >>> conda initialize >>>
+
 # !! Contents within this block are managed by 'conda init' !!
 __conda_setup="$('/home/dadams/anaconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
 if [ $? -eq 0 ]; then

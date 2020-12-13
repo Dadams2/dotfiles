@@ -70,7 +70,6 @@ export ZSH="/home/dadams/.oh-my-zsh"
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
 # Which plugins would you like to load?
-# Standard plugins can be found in ~/.oh-my-zsh/plugins/*
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
@@ -130,6 +129,20 @@ PATH="$PATH:$HOME/.emacs.d/bin"
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/home/dadams/anaconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/home/dadams/anaconda3/etc/profile.d/conda.sh" ]; then
+        . "/home/dadams/anaconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="/home/dadams/anaconda3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+
 #more aliases
 alias rr='curl -s -L https://raw.githubusercontent.com/keroserene/rickrollrc/master/roll.sh | bash'
 alias lorem="curl https://gist.githubusercontent.com/eddie-atkinson/b502aae2dc358635faf67c51e95eab06/raw/f7b5c5be68a3daf9892167513840d435bef3e3bb/lorem.txt"
@@ -143,3 +156,6 @@ export NVM_DIR="$HOME/.nvm"
 alias copy='xclip -se c'
 alias paste='xclip -o'
 
+alias zshc='vim ~/.zshrc'
+alias tmuxc='vim ~/.tmux.conf'
+alias vimc='vim ~/.config/nvim/init.vim'
