@@ -10,7 +10,7 @@ cd ..
 sudo pacman -S --noconfirm xorg-server 
 
 #install favourite programs 
-sudo pacman -S --noconfirm tmux vim zsh alacritty
+sudo pacman -S --noconfirm tmux vim zsh alacritty neovim
 
 #install awesome
 sudo pacman -S --noconfirm awesome
@@ -24,3 +24,34 @@ mkdir -p .config-bakup && \
 config checkout
 
 config config --local status.showUntrackedfiles no
+
+# Post install of tools
+## oh my zsh
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+
+## powerline
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+
+## Tmux plugin manager
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+
+
+## vim plug
+sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
+       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+
+# install fonts
+git clone https://aur.archlinux.org/packages/ttf-meslo-nerd-font-powerlevel10k/
+cd ttf-meslo-nerd-font-powerlevel10k
+makepkg -si
+cd ..
+rm -rf ttf-meslo-nerd-font-powerlevel10k 
+
+# set everything up
+
+source .zshrc
+tmux source .tmux.conf
+~/.tmux/plugins/tmp/scripts/install_plugins.sh
+vim +PlugInstall +qall
+
+echo "startx to start"
