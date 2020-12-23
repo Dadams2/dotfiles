@@ -16,14 +16,14 @@ sudo pacman -S --noconfirm tmux vim zsh alacritty neovim
 sudo pacman -S --noconfirm awesome
 
 #install dotfiles
-alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
+config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 
 mkdir -p .config-bakup && \
-    config checkout 2>&1 | egrep "\s+\." | awk {'print $1'} xargs -I{} mv {} .config-backup/{}
+    $config checkout 2>&1 | egrep "\s+\." | awk {'print $1'} xargs -I{} mv {} .config-backup/{}
 
-config checkout
+$config checkout
 
-config config --local status.showUntrackedfiles no
+$config config --local status.showUntrackedfiles no
 
 # Post install of tools
 ## oh my zsh
