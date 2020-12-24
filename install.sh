@@ -37,7 +37,7 @@ gem install colorls
 ## autojump
 git clone https://aur.archlinux.org/autojump.git
 cd autojump
-makepkg -si
+makepkg -si --noconfirm
 cd ..
 
 ## zsh syntax highilghting
@@ -46,12 +46,14 @@ git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:
 #install dotfiles
 config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 
-mkdir -p .config-bakup && \
-    $config checkout 2>&1 | egrep "\s+\." | awk {'print $1'} xargs -I{} mv {} .config-backup/{}
+#mkdir -p .config-bakup && \
+#    $config checkout 2>&1 | egrep "\s+\." | awk {'print $1'} xargs -I{} mv {} .config-backup/{}
 
-$config checkout
+#$config checkout
 
-$config config --local status.showUntrackedfiles no
+#$config config --local status.showUntrackedfiles no
+
+$config reset --hard
 
 # install fonts
 git clone https://aur.archlinux.org/ttf-meslo-nerd-font-powerlevel10k.git
@@ -61,10 +63,11 @@ cd ..
 rm -rf ttf-meslo-nerd-font-powerlevel10k 
 
 # set everything up
-chsh -s /bin/zsh
-source .zshrc
+sudo chsh -s /bin/zsh
 tmux source .tmux.conf
 ~/.tmux/plugins/tmp/scripts/install_plugins.sh
 nvim +PlugInstall +qall
 
 echo "startx to start"
+/bin/zsh
+source .zshrc
