@@ -15,12 +15,16 @@ sudo pacman -S --noconfirm tmux vim zsh alacritty neovim
 #install awesome
 sudo pacman -S --noconfirm awesome
 
+#zsh bs
+zsh
 # Post install of tools
 ## oh my zsh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 
+zsh
+
 ## powerline
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
 
 ## Tmux plugin manager
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
@@ -69,5 +73,4 @@ tmux source .tmux.conf
 nvim +PlugInstall +qall
 
 echo "startx to start"
-/bin/zsh
 source .zshrc
