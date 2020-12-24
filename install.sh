@@ -1,4 +1,5 @@
 #!/bin/bash 
+shopt -s expand_aliases
 
 #install yay
 git clone https://aur.archlinux.org/yay.git
@@ -15,13 +16,13 @@ sudo pacman -S --noconfirm tmux vim zsh alacritty neovim
 #install awesome
 sudo pacman -S --noconfirm awesome
 
-#zsh bs
-zsh
+
+zsh &
 # Post install of tools
 ## oh my zsh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 
-zsh
+zsh &
 
 ## powerline
 git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
@@ -48,16 +49,11 @@ cd ..
 git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
 
 #install dotfiles
-config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
+alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 
-#mkdir -p .config-bakup && \
-#    $config checkout 2>&1 | egrep "\s+\." | awk {'print $1'} xargs -I{} mv {} .config-backup/{}
 
-#$config checkout
-
-#$config config --local status.showUntrackedfiles no
-
-$config reset --hard
+#bring back the zsh config
+config reset --hard
 
 # install fonts
 git clone https://aur.archlinux.org/ttf-meslo-nerd-font-powerlevel10k.git
@@ -69,8 +65,8 @@ rm -rf ttf-meslo-nerd-font-powerlevel10k
 # set everything up
 sudo chsh -s /bin/zsh
 tmux source .tmux.conf
-~/.tmux/plugins/tmp/scripts/install_plugins.sh
+~/.tmux/plugins/tpm/scripts/install_plugins.sh
 nvim +PlugInstall +qall
 
 echo "startx to start"
-source .zshrc
+zsh
