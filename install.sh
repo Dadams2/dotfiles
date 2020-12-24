@@ -3,11 +3,11 @@
 #install yay
 git clone https://aur.archlinux.org/yay.git
 cd yay 
-makepkg -si
+makepkg -si --noconfirm
 cd ..
 
 #install utilities
-sudo pacman -S --noconfirm xorg-server 
+sudo pacman -S --noconfirm xorg xorg-xinit
 
 #install favourite programs 
 sudo pacman -S --noconfirm tmux vim zsh alacritty neovim
@@ -46,9 +46,9 @@ sudo pacman -S ruby --noconfirm
 gem install colorls
 
 # install fonts
-git clone https://aur.archlinux.org/packages/ttf-meslo-nerd-font-powerlevel10k/
+git clone https://aur.archlinux.org/ttf-meslo-nerd-font-powerlevel10k.git
 cd ttf-meslo-nerd-font-powerlevel10k
-makepkg -si
+makepkg -si --noconfirm
 cd ..
 rm -rf ttf-meslo-nerd-font-powerlevel10k 
 
