@@ -31,7 +31,7 @@ git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 
 # making sure tmux exists
-tmux new -s default
+tmux new-session -d  default 
 ## vim plug
 sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
        https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
