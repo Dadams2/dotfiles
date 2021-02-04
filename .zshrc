@@ -159,3 +159,6 @@ alias paste='xclip -o'
 alias zshc='vim ~/.zshrc'
 alias tmuxc='vim ~/.tmux.conf'
 alias vimc='vim ~/.config/nvim/init.vim'
+
+alias hw='mhwd -l' 
+
