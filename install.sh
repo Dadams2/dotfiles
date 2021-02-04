@@ -1,9 +1,9 @@
 #!/bin/bash 
 shopt -s expand_aliases
 
-#install yay
-git clone https://aur.archlinux.org/yay.git
-cd yay 
+#install paru
+git clone https://aur.archlinux.org/paru.git
+cd paru 
 makepkg -si --noconfirm
 cd ..
 
