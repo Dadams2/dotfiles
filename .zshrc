@@ -82,7 +82,7 @@ plugins=(
     autojump
     tmux
     vi-mode
-#    zsh-autosuggestions
+    zsh-autosuggestions
     zsh-syntax-highlighting
 )
 # theme things
@@ -91,17 +91,30 @@ source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
+bindkey -v                                        # emacs key bindings
+bindkey ' ' magic-space                           # do history expansion on space
+bindkey '^[[3;5~' kill-word                       # ctrl + Supr
+bindkey '^[[1;5C' forward-word                    # ctrl + ->
+bindkey '^[[C' forward-word                       # ctrl + ->
+bindkey '^[[1;5D' backward-word                   # ctrl + <-
+bindkey '^[[D' backward-word                      # ctrl + <-
+bindkey '^[[5~' beginning-of-buffer-or-history    # page up
+bindkey '^[[6~' end-of-buffer-or-history          # page down
+bindkey '^[[Z' undo                               # shift + tab undo last action
+bindkey '^H' backward-kill-word                   # ctrl + backspace 
+
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#999'
 # export MANPATH="/usr/local/man:$MANPATH"
 
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
 
 # Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
+ if [[ -n $SSH_CONNECTION ]]; then
+   export EDITOR='vim'
+ else
+   export EDITOR='mvim'
+ fi
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
@@ -113,6 +126,7 @@ source $ZSH/oh-my-zsh.sh
 #
 # Example aliases
 alias vim='nvim'
+export EDITOR="/usr/bin/nvim"
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
@@ -122,6 +136,11 @@ alias la='colorls -a'
 alias lsg='colorls --gs -l'
 alias ls='colorls'
 alias lst='ls --tree'
+#alias ls='lsd'
+#alias l='ls -l'
+#alias la='ls -a'
+#alias ll='ls -la'
+#alias lst='ls --tree'
 #for ruby install
 PATH="$PATH:$(ruby -e 'puts Gem.user_dir')/bin"
 PATH="$PATH:$HOME/.emacs.d/bin"
@@ -159,3 +178,7 @@ alias paste='xclip -o'
 alias zshc='vim ~/.zshrc'
 alias tmuxc='vim ~/.tmux.conf'
 alias vimc='vim ~/.config/nvim/init.vim'
+
+
+eval "$(rbenv init -)"
+eval $(thefuck --alias) 
