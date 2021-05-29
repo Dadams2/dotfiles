@@ -3,6 +3,7 @@
 # Main Colors
 unrecognized_file: '#3b4252'
 recognized_file:   '#a3be8c'
+executable_file:   '#b48ead'
 dir:               '#5e81ac'
 
 # Link
