@@ -160,3 +160,4 @@ export NVM_DIR="$HOME/.nvm"
 
 
 beets ls -f '$genre' | sort | uniq -c | sort -nr
+source ~/powerlevel10k/powerlevel10k.zsh-theme
