@@ -138,16 +138,16 @@ export EDITOR="/usr/bin/nvim"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 #color ls things
-alias ll='colorls -la'
-alias la='colorls -a'
-alias lsg='colorls --gs -l'
-alias ls='colorls'
+#alias ll='colorls -la'
+#alias la='colorls -a'
+#alias lsg='colorls --gs -l'
+#alias ls='colorls'
 alias lst='ls --tree'
-#alias ls='lsd'
-#alias l='ls -l'
-#alias la='ls -a'
-#alias ll='ls -la'
-#alias lst='ls --tree'
+alias ls='ls'
+alias l='ls -l'
+alias la='ls -a'
+alias ll='ls -la'
+alias lst='ls --tree'
 #for ruby install
 PATH="$PATH:$(ruby -e 'puts Gem.user_dir')/bin"
 PATH="$PATH:$HOME/.emacs.d/bin"
