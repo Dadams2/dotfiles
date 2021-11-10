@@ -1,4 +1,11 @@
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+if [ $TERM = tramp ]; then
+        unset RPROMPT
+        unset RPS1
+        PS1="$ "
+        unsetopt zle
+        unsetopt rcs  # Inhibit loading of further config files
+fi
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
@@ -179,12 +186,7 @@ alias zshc='vim ~/.zshrc'
 alias tmuxc='vim ~/.tmux.conf'
 alias vimc='vim ~/.config/nvim/init.vim'
 
-
 eval "$(rbenv init -)"
 eval $(thefuck --alias) 
 
-
-### RANDOM COLOR SCRIPT ###
-# Get this script from my GitLab: gitlab.com/dwt1/shell-color-scripts
-# Or install it from the Arch User Repository: shell-color-scripts
 
