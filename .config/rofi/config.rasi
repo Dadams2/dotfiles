@@ -1,0 +1,16 @@
+configuration {
+
+	font: "Terminus (TTF) 12";
+	//font: "DejaVu Sans Mono for Powerline 11";
+	/*font: "Terminus (TTF) 12";*/
+	
+
+    display-ssh:    "";
+    display-run:    "";
+    display-drun:   "";
+    display-window: "";
+    display-combi:  "";
+    show-icons:     false;
+}
+
+@theme "/home/dadams/.config/rofi/nord.rasi"
