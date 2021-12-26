@@ -294,10 +294,10 @@ live_config_reload: true
 
 shell:
   program: /bin/zsh
-  args:
-    - -l
-    - -c
-    - "tmux attach || tmux"
+    #args:
+    #  - -l
+    #  - -c
+    #  - "tmux attach || tmux"
 # Key bindings
 #
 # Each binding is defined as an object with some properties. Most of the

@@ -108,7 +108,7 @@ bindkey '^[[D' backward-word                      # ctrl + <-
 bindkey '^[[5~' beginning-of-buffer-or-history    # page up
 bindkey '^[[6~' end-of-buffer-or-history          # page down
 bindkey '^[[Z' undo                               # shift + tab undo last action
-bindkey '^H' backward-kill-word                   # ctrl + backspace 
+bindkey '^H' backward-kill-word                   # ctrl + backspace
 
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#999'
 # export MANPATH="/usr/local/man:$MANPATH"
@@ -142,14 +142,14 @@ alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 #alias la='colorls -a'
 #alias lsg='colorls --gs -l'
 #alias ls='colorls'
+alias ls='exa'
 alias lst='ls --tree'
-alias ls='ls'
 alias l='ls -l'
 alias la='ls -a'
 alias ll='ls -la'
 alias lst='ls --tree'
 #for ruby install
-PATH="$PATH:$(ruby -e 'puts Gem.user_dir')/bin"
+#PATH="$PATH:$(ruby -e 'puts Gem.user_dir')/bin"
 PATH="$PATH:$HOME/.emacs.d/bin"
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
@@ -178,7 +178,7 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 
-#copy and pasting 
+#copy and pasting
 alias copy='xclip -se c'
 alias paste='xclip -o'
 
@@ -186,7 +186,6 @@ alias zshc='vim ~/.zshrc'
 alias tmuxc='vim ~/.tmux.conf'
 alias vimc='vim ~/.config/nvim/init.vim'
 
-eval "$(rbenv init -)"
-eval $(thefuck --alias) 
+#eval "$(rbenv init -)"
 
 
