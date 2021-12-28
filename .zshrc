@@ -86,7 +86,7 @@ plugins=(
     history-substring-search
     colored-man-pages
     git
-    autojump
+#    autojump
     tmux
     vi-mode
     zsh-autosuggestions

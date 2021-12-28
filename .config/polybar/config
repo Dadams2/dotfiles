@@ -1,4 +1,24 @@
+
+[colors]
+nord0 = #2E3440
+nord1 = #3B4252
+nord2 = #434C5E
+nord3 = #4C566A
+nord4 = #D8DEE9
+nord5 = #E5E9F0
+nord6 = #ECEFF4
+nord7 = #8FBCBB
+nord8 = #88C0D0
+nord9 = #81A1C1
+nord10 = #5E81AC
+nord11 = #BF616A
+nord12 = #D08770
+nord13 = #EBCB8B
+nord14 = #A3BE8C
+nord15 = #B48EAD
+
 [bar/mybar]
+
 
 override-redirect = true
 top = true
@@ -11,10 +31,12 @@ offset-x = 20%
 offset-y = 2px
 
 ; Background ARGB color (e.g. #f00, #ff992a, #ddff1023)
-background = #992E3440
+; background = #992E3440
+background = ${colors.nord1}
 
 ; Foreground ARGB color (e.g. #f00, #ff992a, #ddff1023)
-foreground = #000
+foreground = ${colors.nord8}
+; foreground = #000
 
 line-size = 2
 line-color = #fff
@@ -25,19 +47,20 @@ module-margin = 1
 
 ;font-0 = DejaVu Sans Mono for Powerline:style=Medium:size=7.5;2
 font-0 = Fira Code Nerd Font:size=8.5;1.5
-font-1 = feather-custom:size=9;3
-font-2 = FontAwesome5Free:style=Solid:size=8;2
-font-3 = unifont:size=10;3
+font-1 = Fira Code Nerd Font:size=9;3
+font-2 = Fira Code Nerd Font:style=Solid:size=8;2
+font-3 = Fira Code Nerd Font:size=10;3
 
-modules-left = i3
+modules-left = rofi-run i3 xwindow
 modules-center =
-modules-right = wireless-network sep memory sep cpu sep pulseaudio sep bluetooth sep date
+; modules-right = wireless-network sep memory sep cpu sep pulseaudio sep bluetooth sep date
 
+modules-right = memory sep cpu sep pulseaudio date bluetooth dunst-toggle powermenu
 spacing = 0
 
-dim-value = 1.0
 
 wm-name = i3
+wm-restack = i3
 
 ; Available positions:
 ;   left
@@ -50,10 +73,9 @@ tray-offset-y = 0
 tray-padding = 2
 tray-maxsize = 20
 tray-scale = 1.0
-tray-position = right
-tray-background = ${colors.background}
+tray-position = center
+tray-background = ${colors.nord1}
 
-wm-restack = i3
 
 dpi-x = 135
 dpi-y = 135
@@ -71,7 +93,7 @@ index-sort = true
 
 enable-click = true
 
-enable-scroll = false
+enable-scroll = true
 
 wrapping-scroll = false
 
@@ -79,63 +101,46 @@ reverse-scroll = false
 
 fuzzy-match = true
 
+
 label-unfocused = %index%
 label-unfocused-padding = 2
 label-unfocused-foreground = #D8DEE9
 
 label-focused = %index%
-label-focused-background = #4C566A
 label-focused-padding = 2
 label-focused-foreground = #D8DEE9
+label-focused-background = ${colors.nord3}
+label-focused-underline= ${colors.nord10}
+
+[module/xwindow]
+type = internal/xwindow
+label = %title:0:30:...%
 
 [module/pulseaudio]
 type = internal/pulseaudio
 
-; Sink to be used, if it exists (find using `pacmd list-sinks`, name field)
-; If not, uses default sink
-sink = alsa_output.pci-0000_12_00.3.analog-stereo
+format-volume = <label-volume> <bar-volume>
+label-volume =  VOL %percentage%%
+label-volume-foreground = ${colors.nord8}
 
-; Use PA_VOLUME_UI_MAX (~153%) if true, or PA_VOLUME_NORM (100%) if false
-; Default: true
-use-ui-max = true
+label-muted =  muted
 
-; Interval for volume increase/decrease (in percent points)
-; Default: 5
-interval = 5
-
-; Available tags:
-;   <label-volume> (default)
-;   <ramp-volume>
-;   <bar-volume>
-format-volume = <ramp-volume> <label-volume>
-
-; Available tags:
-;   <label-muted> (default)
-;   <ramp-volume>
-;   <bar-volume>
-;format-muted = <label-muted>
-
-; Available tokens:
-;   %percentage% (default)
-;   %decibels%
-label-volume = %percentage%%
-label-volume-foreground = #D08770
-
-; Available tokens:
-;   %percentage% (default)
-;   %decibels%
-label-muted = 
-label-muted-foreground = #D08770
-
-; Only applies if <ramp-volume> is used
-ramp-volume-0 = 
-ramp-volume-1 = 
-ramp-volume-2 = 
-ramp-volume-foreground = #D08770
-
-; Right and Middle click
-click-right = pavucontrol
-; click-middle =
+bar-volume-width = 10
+bar-volume-foreground-0 = ${colors.nord8}
+bar-volume-foreground-1 = ${colors.nord8}
+bar-volume-foreground-2 = ${colors.nord8}
+bar-volume-foreground-3 = ${colors.nord8}
+bar-volume-foreground-4 = ${colors.nord8}
+bar-volume-foreground-5 = ${colors.nord13}
+bar-volume-foreground-6 = ${colors.nord11}
+bar-volume-gradient = false
+bar-volume-indicator = |
+bar-volume-indicator-font = 2
+bar-volume-fill = ─
+bar-volume-fill-font = 2
+bar-volume-empty = ─
+bar-volume-empty-font = 2
+bar-volume-empty-foreground = ${colors.nord4}
 
 [module/date]
 type = internal/date
@@ -157,11 +162,11 @@ time-alt = %H:%M:%S
 
 label = %date% %time%
 label-font = 0
-label-foreground = #D8DEE9
+label-foreground = ${colors.nord8}
 
 [module/wireless-network]
 type = internal/network
-interface = wlp2s0
+interface = enp7s0
 
 label-connected = %essid%
 format-connected = <ramp-signal>
@@ -182,13 +187,11 @@ ramp-signal-5 = 
 [module/cpu]
 type = internal/cpu
 
-; Seconds to sleep between updates
-; Default: 1
 interval = 0.5
 
-label =  %percentage:2%%
+label =  %percentage:2%%
 
-label-foreground = #81A1C1
+label-foreground = ${colors.nord8}
 
 [module/memory]
 type = internal/memory
@@ -216,148 +219,9 @@ format = <label>
 ;   %gb_swap_free%
 ;   %gb_swap_used%
 
-label =  %gb_used%
+label = %gb_used%
 
-label-foreground = #B48EAD
-
-[module/temperature]
-type = internal/temperature
-
-; Seconds to sleep between updates
-; Default: 1
-interval = 0.5
-
-; Thermal zone to use
-; To list all the zone types, run
-; $ for i in /sys/class/thermal/thermal_zone*; do echo "$i: $(<$i/type)"; done
-; Default: 0
-thermal-zone = 0
-
-; Full path of temperature sysfs path
-; Use `sensors` to find preferred temperature source, then run
-; $ for i in /sys/class/hwmon/hwmon*/temp*_input; do echo "$(<$(dirname $i)/name): $(cat ${i%_*}_label 2>/dev/null || echo $(basename ${i%_*})) $(readlink -f $i)"; done
-; to find path to desired file
-; Default reverts to thermal zone setting
-hwmon-path = /sys/devices/platform/coretemp.0/hwmon/hwmon2/temp1_input
-
-; Threshold temperature to display warning label (in degrees celsius)
-; Default: 80
-warn-temperature = 80
-
-format = <label>
-
-; Available tags:
-;   <label-warn> (default)
-;   <ramp>
-
-; Available tokens:
-;   %temperature% (deprecated)
-;   %temperature-c%   (default, temperature in °C)
-;   %temperature-f%   (temperature in °F)
-label =  %temperature-c%
-
-label-foreground = #BF616A
-
-[module/battery]
-type = internal/battery
-
-full-at = 99
-
-; Use the following command to list batteries and adapters:
-; $ ls -1 /sys/class/power_supply/
-battery = BAT0
-adapter = AC
-
-; If an inotify event haven't been reported in this many
-; seconds, manually poll for new values.
-;
-; Needed as a fallback for systems that don't report events
-; on sysfs/procfs.
-;
-; Disable polling by setting the interval to 0.
-;
-; Default: 5
-poll-interval = 5
-
-; see "man date" for details on how to format the time string
-; NOTE: if you want to use syntax tags here you need to use %%{...}
-; Default: %H:%M:%S
-time-format = %H:%M
-
-; Available tags:
-;   <label-charging> (default)
-;   <bar-capacity>
-;   <ramp-capacity>
-;   <animation-charging>
-format-charging = <label-charging>
-
-; Available tags:
-;   <label-discharging> (default)
-;   <bar-capacity>
-;   <ramp-capacity>
-;   <animation-discharging>
-format-discharging = <label-discharging>
-
-; Available tags:
-;   <label-full> (default)
-;   <bar-capacity>
-;   <ramp-capacity>
-format-full = <label-full>
-
-; Available tokens:
-;   %percentage% (default) - is set to 100 if full-at is reached
-;   %percentage_raw% (unreleased)
-;   %time%
-;   %consumption% (shows current charge rate in watts)
-label-charging =  %percentage:2%%
-
-label-charging-foreground = #A3BE8C
-
-; Available tokens:
-;   %percentage% (default) - is set to 100 if full-at is reached
-;   %percentage_raw% (unreleased)
-;   %time%
-;   %consumption% (shows current discharge rate in watts)
-label-discharging =  %percentage:2%%
-
-label-discharging-foreground = #EDB54B
-
-; Available tokens:
-;   %percentage% (default) - is set to 100 if full-at is reached
-;   %percentage_raw% (unreleased)
-label-full =  %percentage:2%%
-label-full-foreground = #A3BE8C
-
-; Only applies if <ramp-capacity> is used
-ramp-capacity-0 = 
-ramp-capacity-1 = 
-ramp-capacity-2 = 
-ramp-capacity-3 = 
-ramp-capacity-4 = 
-ramp-capacity-foreground = #EDB54B
-
-; Only applies if <bar-capacity> is used
-bar-capacity-width = 10
-
-; Only applies if <animation-charging> is used
-animation-charging-0 = 
-animation-charging-1 = 
-animation-charging-2 = 
-animation-charging-3 = 
-animation-charging-4 = 
-animation-charging-foreground = #A3BE8C
-; Framerate in milliseconds
-animation-charging-framerate = 750
-
-; Only applies if <animation-discharging> is used
-animation-discharging-0 = 
-animation-discharging-1 = 
-animation-discharging-2 = 
-animation-discharging-3 = 
-animation-discharging-4 = 
-animation-discharging-foreground = #DCA060
-; Framerate in milliseconds
-animation-discharging-framerate = 500
+label-foreground = ${colors.nord8}
 
 [module/decor-glyph]
 type = custom/text
@@ -374,3 +238,59 @@ exec = rofi-bluetooth --status
 interval = 1
 click-left = rofi-bluetooth &
 
+
+[module/powermenu]
+type = custom/menu
+
+expand-right = true
+
+format-spacing = 1
+
+label-open =  Power Menu
+label-open-foreground = ${colors.nord8}
+label-close =  Cancel
+label-close-foreground = ${colors.nord8}
+label-separator = |
+label-separator-foreground = ${colors.nord4}
+
+menu-0-0 = 
+menu-0-0-exec = #powermenu.open.1
+menu-0-1 = 
+menu-0-1-exec = #powermenu.open.2
+menu-0-2 = 
+menu-0-2-exec = #powermenu.open.3
+menu-0-3 = 
+menu-0-3-exec = #powermenu.open.4
+
+menu-1-0 = 
+menu-1-0-exec = #powermenu.open.0
+menu-1-1 = 
+menu-1-1-exec = betterlockscreen -l blur 1.0
+
+menu-2-0 = 
+menu-2-0-exec = #powermenu.open.0
+menu-2-1 = 
+menu-2-1-exec = systemctl suspend
+
+menu-3-0 = 
+menu-3-0-exec = #powermenu.open.0
+menu-3-1 = 
+menu-3-1-exec = reboot
+
+menu-4-0 = 
+menu-4-0-exec = #powermenu.open.0
+menu-4-1 = 
+menu-4-1-exec = poweroff
+
+[module/rofi-run]
+type = custom/text
+content = :>
+content-padding = 2
+click-left = /home/th1nhhdk/.config/polybar/scripts/rofi.sh
+
+[module/dunst-toggle]
+type = custom/ipc
+hook-0 = echo 
+hook-1 = echo 
+click-left = /home/th1nhhdk/.config/polybar/scripts/dunst.sh
+initial = 1
