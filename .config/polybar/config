@@ -1,4 +1,3 @@
-
 [colors]
 nord0 = #2E3440
 nord1 = #3B4252
@@ -52,7 +51,7 @@ font-2 = Fira Code Nerd Font:style=Solid:size=8;2
 font-3 = Fira Code Nerd Font:size=10;3
 
 modules-left = rofi-run i3 xwindow
-modules-center =
+modules-center = cpu
 ; modules-right = wireless-network sep memory sep cpu sep pulseaudio sep bluetooth sep date
 
 modules-right = memory sep cpu sep pulseaudio date bluetooth dunst-toggle powermenu
@@ -162,7 +161,7 @@ time-alt = %H:%M:%S
 
 label = %date% %time%
 label-font = 0
-label-foreground = ${colors.nord8}
+label-foreground = 
 
 [module/wireless-network]
 type = internal/network
@@ -286,11 +285,12 @@ menu-4-1-exec = poweroff
 type = custom/text
 content = :>
 content-padding = 2
-click-left = /home/th1nhhdk/.config/polybar/scripts/rofi.sh
+click-left = /home/dadams/.config/polybar/scripts/rofi.sh
 
 [module/dunst-toggle]
 type = custom/ipc
 hook-0 = echo 
 hook-1 = echo 
-click-left = /home/th1nhhdk/.config/polybar/scripts/dunst.sh
+click-left = /home/dadams/.config/polybar/scripts/dunst.sh
 initial = 1
+

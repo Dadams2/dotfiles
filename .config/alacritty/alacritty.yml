@@ -225,8 +225,6 @@ bell:
   animation: EaseOutExpo
   duration: 0
 
-# Background opacity
-background_opacity: 0.9
 
 # Mouse bindings
 #
@@ -265,6 +263,8 @@ selection:
   semantic_escape_chars: ",│`|:\"' ()[]{}<>"
 
 window.dynamic_title: true
+
+window.opacity: 0.9
 
 # Style of the cursor
 #

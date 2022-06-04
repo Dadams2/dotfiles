@@ -85,10 +85,10 @@ plugins=(
     git
     history-substring-search
     colored-man-pages
-    git
 #    autojump
     tmux
     vi-mode
+    systemd
     zsh-autosuggestions
     zsh-syntax-highlighting
 )
@@ -122,7 +122,7 @@ ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#999'
  else
    export EDITOR='mvim'
  fi
-
+eval "$(zoxide init zsh)"
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
 
@@ -151,32 +151,16 @@ alias lst='ls --tree'
 #for ruby install
 #PATH="$PATH:$(ruby -e 'puts Gem.user_dir')/bin"
 PATH="$PATH:$HOME/.emacs.d/bin"
+PATH="$PATH:$HOME/.cargo/bin"
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 
-# !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('$HOME/anaconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "$HOME/anaconda3/etc/profile.d/conda.sh" ]; then
-        . "$HOME/anaconda3/etc/profile.d/conda.sh"
-    else
-        export PATH="$HOME/anaconda3/bin:$PATH"
-    fi
-fi
-unset __conda_setup
-# <<< conda initialize <<<
+[ -f /opt/miniconda3/etc/profile.d/conda.sh ] && source /opt/miniconda3/etc/profile.d/conda.sh
 
 #more aliases
 alias rr='curl -s -L https://raw.githubusercontent.com/keroserene/rickrollrc/master/roll.sh | bash'
 alias lorem="curl https://gist.githubusercontent.com/eddie-atkinson/b502aae2dc358635faf67c51e95eab06/raw/f7b5c5be68a3daf9892167513840d435bef3e3bb/lorem.txt"
-#node version manager
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
 
 #copy and pasting
 alias copy='xclip -se c'
@@ -188,4 +172,7 @@ alias vimc='vim ~/.config/nvim/init.vim'
 
 #eval "$(rbenv init -)"
 
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
