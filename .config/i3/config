@@ -27,7 +27,7 @@ gaps top 20
 
 # Configure border style <normal|1pixel|pixel xx|none|pixel>
 default_border pixel 0
-default_floating_border normal
+default_floating_border pixel 0
 
 # Hide borders
 # hide_edge_borders none
@@ -53,8 +53,8 @@ exec --no-startup-id nm-applet
 
 # Use pactl to adjust volume in PulseAudio.
 set $refresh_i3status killall -SIGUSR1 i3status
-bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +10% && $refresh_i3status
-bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -10% && $refresh_i3status
+bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +1% && $refresh_i3status
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -1% && $refresh_i3status
 bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status
 bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
 
@@ -63,7 +63,8 @@ floating_modifier $mod
 
 # start a terminal
 bindsym $mod+Return exec i3-sensible-terminal
-bindsym mod+Shift+Return exec /usr/bin/kitty -o shell="/bin/zsh"
+bindsym $mod+g exec ~/.local/bin/e
+bindsym $mod+Shift+Return exec /usr/bin/kitty -o shell="/bin/zsh"
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -72,8 +73,8 @@ bindsym $mod+Shift+q kill
 #bindsym $mod+d exec --no-startup-id dmenu_run
 # bindsym $mod+d exec --no-startup-id rofi -show combi -run-shell-command '{terminal} -e zsh -ic "{cmd} && read"'
 bindsym $mod+p exec --no-startup-id ~/.config/rofi/bin/menu_powermenu
-bindsym $mod+n exec --no-startup-id ~/.config/rofi/bin/menu_network
-bindsym $mod+m exec --no-startup-id ~/.config/rofi/bin/menu_mpd
+bindsym $mod+c exec --no-startup-id ~/.config/rofi/bin/menu_network
+bindsym $mod+x exec --no-startup-id ~/.config/rofi/bin/menu_mpd
 bindsym $mod+d exec --no-startup-id ~/.config/rofi/bin/launcher_text run
 bindsym $modShift+v exec --no-startup-id ~/.config/rofi/vpn.sh
 bindsym $mod+Shift+d exec --no-startup-id ~/.config/rofi/bin/launcher_text window
@@ -149,6 +150,17 @@ set $ws8 "8"
 set $ws9 "9"
 set $ws10 "10"
 
+workspace $ws1 output DP-4
+workspace $ws2 output DP-4
+workspace $ws3 output DP-4
+workspace $ws4 output DP-4
+workspace $ws5 output DP-4
+workspace $ws6 output HDMI-0
+workspace $ws7 output HDMI-0
+workspace $ws8 output HDMI-0
+workspace $ws9 output HDMI-0
+workspace $ws10 output HDMI-0
+
 # switch to workspace
 bindsym $mod+1 workspace number $ws1
 bindsym $mod+2 workspace number $ws2
@@ -173,6 +185,19 @@ bindsym $mod+Shift+8 move container to workspace number $ws8
 bindsym $mod+Shift+9 move container to workspace number $ws9
 bindsym $mod+Shift+0 move container to workspace number $ws10
 
+
+bindsym $mod+comma focus output left
+bindsym $mod+Shift+comma move workspace to output left
+bindsym $mod+period focus output right
+bindsym $mod+Shift+period move workspace to output right
+
+bindsym $mod+m workspace next
+bindsym $mod+n workspace prev
+
+
+# load layout things haha
+bindsym $mod+u exec --no-startup-id ~/.config/i3/load_layout.sh
+
 # reload the configuration file
 bindsym $mod+Shift+c reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
@@ -189,7 +214,7 @@ exec_always --no-startup-id ~/.config/polybar/launch_polybar.sh
 exec_always --no-startup-id picom --config .config/picom/picom.conf --experimental-backends
 
 # Lock screen
-bindsym $mod+x exec --no-startup-id betterlockscreen -l
+bindsym $mod+Shift+x exec --no-startup-id betterlockscreen -l
 
 #bluetooth
 bindsym $mod+shift+b exec --no-startup-id rofi-bluetooth
@@ -214,6 +239,8 @@ mode "resize" {
         bindsym j resize grow height 10 px or 10 ppt
         bindsym k resize shrink height 10 px or 10 ppt
         bindsym l resize grow width 10 px or 10 ppt
+
+        bindsym n resize set 1920 1080
 
         # same bindings, but for the arrow keys
         bindsym Left resize shrink width 10 px or 10 ppt

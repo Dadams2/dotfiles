@@ -1,141 +1,107 @@
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-if [ $TERM = tramp ]; then
-        unset RPROMPT
-        unset RPS1
-        PS1="$ "
-        unsetopt zle
-        unsetopt rcs  # Inhibit loading of further config files
-fi
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
-
-# If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:/usr/local/bin:$PATH
-
-# Path to your oh-my-zsh installation.
-export ZSH="$HOME/.oh-my-zsh"
-
-# Set name of the theme to load --- if set to "random", it will
-# load a random theme each time oh-my-zsh is loaded, in which case,
-# to know which specific one was loaded, run: echo $RANDOM_THEME
-# See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-
-# Set list of themes to pick from when loading at random
-# Setting this variable when ZSH_THEME=random will cause zsh to load
-# a theme from this variable instead of looking in ~/.oh-my-zsh/themes/
-# If set to an empty array, this variable will have no effect.
-# ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
-
-# Uncomment the following line to use case-sensitive completion.
-# CASE_SENSITIVE="true"
-
-# Uncomment the following line to use hyphen-insensitive completion.
-# Case-sensitive completion must be off. _ and - will be interchangeable.
-# HYPHEN_INSENSITIVE="true"
-
-# Uncomment the following line to disable bi-weekly auto-update checks.
-# DISABLE_AUTO_UPDATE="true"
-
-# Uncomment the following line to automatically update without prompting.
-# DISABLE_UPDATE_PROMPT="true"
-
-# Uncomment the following line to change how often to auto-update (in days).
-# export UPDATE_ZSH_DAYS=13
-
-# Uncomment the following line if pasting URLs and other text is messed up.
-# DISABLE_MAGIC_FUNCTIONS=true
-
-# Uncomment the following line to disable colors in ls.
-# DISABLE_LS_COLORS="true"
-
-# Uncomment the following line to disable auto-setting terminal title.
-# DISABLE_AUTO_TITLE="true"
-
-# Uncomment the following line to enable command auto-correction.
-# ENABLE_CORRECTION="true"
-
-# Uncomment the following line to display red dots whilst waiting for completion.
-# COMPLETION_WAITING_DOTS="true"
-
-# Uncomment the following line if you want to disable marking untracked files
-# under VCS as dirty. This makes repository status check for large repositories
-# much, much faster.
-# DISABLE_UNTRACKED_FILES_DIRTY="true"
-
-# Uncomment the following line if you want to change the command execution time
-# stamp shown in the history command output.
-# You can set one of the optional three formats:
-# "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
-# or set a custom format using the strftime function format specifications,
-# see 'man strftime' for details.
-# HIST_STAMPS="mm/dd/yyyy"
-
-# Would you like to use another custom folder than $ZSH/custom?
-# ZSH_CUSTOM=/path/to/new-custom-folder
-
-# Which plugins would you like to load?
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
-plugins=(
-    archlinux
-    git
-    history-substring-search
-    colored-man-pages
-#    autojump
-    tmux
-    vi-mode
-    systemd
-    zsh-autosuggestions
-    zsh-syntax-highlighting
-)
-# theme things
-ZSH_THEME="powerlevel10k/powerlevel10k"
-source $ZSH/oh-my-zsh.sh
-
-# User configuration
-
-bindkey -v                                        # emacs key bindings
-bindkey ' ' magic-space                           # do history expansion on space
-bindkey '^[[3;5~' kill-word                       # ctrl + Supr
-bindkey '^[[1;5C' forward-word                    # ctrl + ->
-bindkey '^[[C' forward-word                       # ctrl + ->
-bindkey '^[[1;5D' backward-word                   # ctrl + <-
-bindkey '^[[D' backward-word                      # ctrl + <-
-bindkey '^[[5~' beginning-of-buffer-or-history    # page up
-bindkey '^[[6~' end-of-buffer-or-history          # page down
-bindkey '^[[Z' undo                               # shift + tab undo last action
-bindkey '^H' backward-kill-word                   # ctrl + backspace
-
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#999'
-# export MANPATH="/usr/local/man:$MANPATH"
-
-# You may need to manually set your language environment
-# export LANG=en_US.UTF-8
-
-# Preferred editor for local and remote sessions
- if [[ -n $SSH_CONNECTION ]]; then
-   export EDITOR='vim'
- else
-   export EDITOR='mvim'
- fi
-eval "$(zoxide init zsh)"
-# Compilation flags
-# export ARCHFLAGS="-arch x86_64"
-
-# Set personal aliases, overriding those provided by oh-my-zsh libs,
-# plugins, and themes. Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
-# For a full list of active aliases, run `alias`.
+# Personal Zsh configuration file. It is strongly recommended to keep all
+# shell customization and configuration (including exported environment
+# variables such as PATH) in this file or in files sourced from it.
 #
-# Example aliases
-alias vim='nvim'
-export EDITOR="/usr/bin/nvim"
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
+# Documentation: https://github.com/romkatv/zsh4humans/blob/v5/README.md.
+
+# Periodic auto-update on Zsh startup: 'ask' or 'no'.
+# You can manually run `z4h update` to update everything.
+zstyle ':z4h:' auto-update      'no'
+# Ask whether to auto-update this often; has no effect if auto-update is 'no'.
+zstyle ':z4h:' auto-update-days '28'
+
+# Keyboard type: 'mac' or 'pc'.
+zstyle ':z4h:bindkey' keyboard  'pc'
+
+# Start tmux if not already in tmux.
+# zstyle ':z4h:' start-tmux command tmux -u new -A -D -t z4h
+
+# Whether to move prompt to the bottom when zsh starts and on Ctrl+L.
+zstyle ':z4h:' prompt-at-bottom 'no'
+
+# Mark up shell's output with semantic information.
+zstyle ':z4h:' term-shell-integration 'yes'
+
+# Right-arrow key accepts one character ('partial-accept') from
+# command autosuggestions or the whole thing ('accept')?
+zstyle ':z4h:autosuggestions' forward-char 'accept'
+
+# Recursively traverse directories when TAB-completing files.
+zstyle ':z4h:fzf-complete' recurse-dirs 'no'
+
+# Enable direnv to automatically source .envrc files.
+zstyle ':z4h:direnv'         enable 'no'
+# Show "loading" and "unloading" notifications from direnv.
+zstyle ':z4h:direnv:success' notify 'yes'
+
+# Enable ('yes') or disable ('no') automatic teleportation of z4h over
+# SSH when connecting to these hosts.
+zstyle ':z4h:ssh:example-hostname1'   enable 'yes'
+zstyle ':z4h:ssh:*.example-hostname2' enable 'no'
+# The default value if none of the overrides above match the hostname.
+zstyle ':z4h:ssh:*'                   enable 'no'
+
+# Send these files over to the remote host when connecting over SSH to the
+# enabled hosts.
+zstyle ':z4h:ssh:*' send-extra-files '~/.nanorc' '~/.env.zsh'
+
+# Clone additional Git repositories from GitHub.
+#
+# This doesn't do anything apart from cloning the repository and keeping it
+# up-to-date. Cloned files can be used after `z4h init`. This is just an
+# example. If you don't plan to use Oh My Zsh, delete this line.
+z4h install ohmyzsh/ohmyzsh || return
+
+# Install or update core components (fzf, zsh-autosuggestions, etc.) and
+# initialize Zsh. After this point console I/O is unavailable until Zsh
+# is fully initialized. Everything that requires user interaction or can
+# perform network I/O must be done above. Everything else is best done below.
+z4h init || return
+
+# Extend PATH.
+path=(~/bin $path)
+
+# Export environment variables.
+export GPG_TTY=$TTY
+
+# Source additional local files if they exist.
+z4h source ~/.env.zsh
+
+# Use additional Git repositories pulled in with `z4h install`.
+#
+# This is just an example that you should delete. It does nothing useful.
+z4h source ohmyzsh/ohmyzsh/lib/diagnostics.zsh  # source an individual file
+z4h load   ohmyzsh/ohmyzsh/plugins/emoji-clock  # load a plugin
+
+# Define key bindings.
+z4h bindkey z4h-backward-kill-word  Ctrl+Backspace     Ctrl+H
+z4h bindkey z4h-backward-kill-zword Ctrl+Alt+Backspace
+
+z4h bindkey undo Ctrl+/ Shift+Tab  # undo the last command line change
+z4h bindkey redo Alt+/             # redo the last undone command line change
+
+z4h bindkey z4h-cd-back    Alt+Left   # cd into the previous directory
+z4h bindkey z4h-cd-forward Alt+Right  # cd into the next directory
+z4h bindkey z4h-cd-up      Alt+Up     # cd into the parent directory
+z4h bindkey z4h-cd-down    Alt+Down   # cd into a child directory
+
+# Autoload functions.
+autoload -Uz zmv
+
+# Define functions and completions.
+function md() { [[ $# == 1 ]] && mkdir -p -- "$1" && cd -- "$1" }
+compdef _directories md
+
+# Define named directories: ~w <=> Windows home directory on WSL.
+[[ -z $z4h_win_home ]] || hash -d w=$z4h_win_home
+
+# Init things that need to happen
+eval "$(zoxide init zsh)"
+[ -f /opt/miniconda3/etc/profile.d/conda.sh ] && source /opt/miniconda3/etc/profile.d/conda.sh
+
+# Define aliases.
+alias tree='tree -a -I .git'
+
 alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 #color ls things
 #alias ll='colorls -la'
@@ -148,31 +114,86 @@ alias l='ls -l'
 alias la='ls -a'
 alias ll='ls -la'
 alias lst='ls --tree'
-#for ruby install
-#PATH="$PATH:$(ruby -e 'puts Gem.user_dir')/bin"
-PATH="$PATH:$HOME/.emacs.d/bin"
-PATH="$PATH:$HOME/.cargo/bin"
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
-
-[ -f /opt/miniconda3/etc/profile.d/conda.sh ] && source /opt/miniconda3/etc/profile.d/conda.sh
-
-#more aliases
-alias rr='curl -s -L https://raw.githubusercontent.com/keroserene/rickrollrc/master/roll.sh | bash'
-alias lorem="curl https://gist.githubusercontent.com/eddie-atkinson/b502aae2dc358635faf67c51e95eab06/raw/f7b5c5be68a3daf9892167513840d435bef3e3bb/lorem.txt"
-
-#copy and pasting
-alias copy='xclip -se c'
-alias paste='xclip -o'
-
+alias worksync='rsync -auP work:~/Org/work ~/Org && rsync -auP ~/Org/work work:~/Org/'
+alias roamsync='rsync -auP work:~/Roam ~/ && rsync -auP ~/Roam work:~/'
+alias m='e --eval "(progn (magit-status) (delete-other-windows))"'
+alias mt="m -t"
+alias et="e -t"
+alias kfast="pkill -f Fast"
+alias restart-emacs="systemctl --user daemon-reload && systemctl --user restart emacs.service"
+alias i3cheatsheet='egrep ^bind ~/.i3/config | cut -d '\'' '\'' -f 2- | sed '\''s/ /\t/'\'' | column -ts $'\''\t'\'' | pr -2 -w 145 -t | less'
 alias zshc='vim ~/.zshrc'
 alias tmuxc='vim ~/.tmux.conf'
 alias vimc='vim ~/.config/nvim/init.vim'
+alias j='z'
+alias rr='curl -s -L https://raw.githubusercontent.com/keroserene/rickrollrc/master/roll.sh | bash'
+alias lorem="curl https://gist.githubusercontent.com/eddie-atkinson/b502aae2dc358635faf67c51e95eab06/raw/f7b5c5be68a3daf9892167513840d435bef3e3bb/lorem.txt"
+alias c='clear'                             # c:            Clear terminal display
 
-#eval "$(rbenv init -)"
+# Set PATHS
+PATH="$PATH:$HOME/.emacs.d/bin"
+PATH="$PATH:$HOME/.cargo/bin"
+PATH="$PATH:$HOME/.local/bin"
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+# Variables
+export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS'
+    --color=fg:#e5e9f0,bg:#3b4252,hl:#81a1c1
+    --color=fg+:#e5e9f0,bg+:#3b4252,hl+:#81a1c1
+    --color=info:#eacb8a,prompt:#bf6069,pointer:#b48dac
+    --color=marker:#a3be8b,spinner:#b48dac,header:#a3be8b'
 
+
+# Add flags to existing aliases.
+# alias ls="${aliases[ls]:-ls} -A"
+
+# Set shell options: http://zsh.sourceforge.net/Doc/Release/Options.html.
+setopt glob_dots     # no special treatment for file names with a leading dot
+setopt no_auto_menu  # require an extra TAB press to open the completion menu
+
+# Custom functions
+function cleandead {
+   TMPDIR=/tmp
+   DIR=$1
+   DSTRING='WARNING: com.dugeo.util.swing.DeadlockDetector$DeadlockException'
+   FILE=$(find $DIR -type f -printf "%T@ %p\n" | sort -n | tail -1 | cut -f2- -d" ")
+   echo $FILE
+   DATES=$(grep "$DSTRING" "$FILE" | awk '{print $1,$2}')
+   echo $DATES
+
+   cp -f "$FILE" $TMPDIR/tmpmove.tmp.0
+   while read dt tm; do
+      cp -f $TMPDIR/tmpmove.tmp.0 $TMPDIR/tmpmove.tmp.0.0
+      VARONE=$(echo "$dt $tm")
+      VARTWO=$(echo "$dt-$tm")
+      echo $VARONE
+      echo $VARTWO
+      sed -ri "s/$VARONE java.lang./$VARTWO java.lang./g" $TMPDIR/tmpmove.tmp.0.0
+      sed -ri "s/$VARONE//g" $TMPDIR/tmpmove.tmp.0.0
+      mv -f $TMPDIR/tmpmove.tmp.0.0 $TMPDIR/tmpmove.tmp.0
+   done < <(echo $DATES | xargs -n2)
+
+   clean $FILE
+}
+
+# Cleans a stacktrace (does not work if the stacktrace still has a date/time)
+function clean {
+   FILE=$1
+   TMPDIR=/tmp
+   grep -vwE '^\s+at\s.*model\.property\..*$' $TMPDIR/tmpmove.tmp.0 >$TMPDIR/tmpmove.tmp.1
+   grep -vwE '^.*Lambda\$[0123456789]+.*$' $TMPDIR/tmpmove.tmp.1 >$TMPDIR/tmpmove.tmp.2
+   grep -vwE '^.*DebugIfSlowEvent.debugIfSlowOnEDT.*$' $TMPDIR/tmpmove.tmp.2 >$TMPDIR/tmpmove.tmp.3
+   sed -r '/^\s+at\s.*$/ s/,\s/,/g' $TMPDIR/tmpmove.tmp.3 >$TMPDIR/tmpmove.tmp.4
+   mv -f $TMPDIR/tmpmove.tmp.4 "$FILE"
+   rm -f $TMPDIR/tmpmove.tmp.0 $TMPDIR/tmpmove.tmp.1 $TMPDIR/tmpmove.tmp.2 $TMPDIR/tmpmove.tmp.3 $TMPDIR/tmpmove.tmp.4
+}
+
+function wsync {
+  rsync -aP work:$1 .
+}
+
+
+function save_workspace {
+   i3-save-tree --workspace $1 > ~/.config/i3/workspace_$1.json
+sed -i 's|^\(\s*\)// "|\1"|g; /^\s*\/\//d' ~/.config/i3/workspace_$1.json
+   echo "Make sure to manually edit ~/.config/i3/workspace-$1.json"
+}

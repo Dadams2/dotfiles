@@ -15,9 +15,10 @@ while IFS= read -r line;do
     res=$(echo $line | cut -d":" -f2 | cut -d"+" -f1)
     if [[ "$res" == " 1080x1920" ]]; then
         MONITOR=$mon polybar --reload -q -c "$DIR"/bars/vertical.ini default &
-    fi
-    if [[ "$res" == " 5120x1440" ]]; then
+    elif [[ "$res" == " 5120x1440" ]]; then
         MONITOR=$mon polybar --reload -q -c "$DIR"/bars/ultrawide.ini ultrawide &
+    else
+        MONITOR=$mon polybar --reload -q -c "$DIR"/bars/vertical.ini default &
     fi
 done < <(polybar --list-monitors)
 
