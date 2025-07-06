@@ -63,28 +63,39 @@ static inline void network_update(struct network* net) {
   double delta_obytes = (double)(net->data.ifmd_data.ifi_obytes - obytes_nm1)
                         / time_scale;
 
-  double exponent_ibytes = log10(delta_ibytes);
-  double exponent_obytes = log10(delta_obytes);
-
-  if (exponent_ibytes < 3) {
+  // Handle download (ibytes)
+  if (delta_ibytes <= 0) {
     net->down_unit = UNIT_BPS;
-    net->down = delta_ibytes;
-  } else if (exponent_ibytes < 6) {
-    net->down_unit = UNIT_KBPS;
-    net->down = delta_ibytes / 1000.0;
-  } else if (exponent_ibytes < 9) {
-    net->down_unit = UNIT_MBPS;
-    net->down = delta_ibytes / 1000000.0;
+    net->down = 0;
+  } else {
+    double exponent_ibytes = log10(delta_ibytes);
+    if (exponent_ibytes < 3) {
+      net->down_unit = UNIT_BPS;
+      net->down = delta_ibytes;
+    } else if (exponent_ibytes < 6) {
+      net->down_unit = UNIT_KBPS;
+      net->down = delta_ibytes / 1000.0;
+    } else {
+      net->down_unit = UNIT_MBPS;
+      net->down = delta_ibytes / 1000000.0;
+    }
   }
 
-  if (exponent_obytes < 3) {
+  // Handle upload (obytes)
+  if (delta_obytes <= 0) {
     net->up_unit = UNIT_BPS;
-    net->up = delta_obytes;
-  } else if (exponent_obytes < 6) {
-    net->up_unit = UNIT_KBPS;
-    net->up = delta_obytes / 1000.0;
-  } else if (exponent_obytes < 9) {
-    net->up_unit = UNIT_MBPS;
-    net->up = delta_obytes / 1000000.0;
+    net->up = 0;
+  } else {
+    double exponent_obytes = log10(delta_obytes);
+    if (exponent_obytes < 3) {
+      net->up_unit = UNIT_BPS;
+      net->up = delta_obytes;
+    } else if (exponent_obytes < 6) {
+      net->up_unit = UNIT_KBPS;
+      net->up = delta_obytes / 1000.0;
+    } else {
+      net->up_unit = UNIT_MBPS;
+      net->up = delta_obytes / 1000000.0;
+    }
   }
 }
