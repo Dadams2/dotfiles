@@ -6,6 +6,8 @@
 #include <net/if_mib.h>
 #include <sys/select.h>
 #include <sys/sysctl.h>
+#include <ifaddrs.h>
+#include <net/if_dl.h>
 
 static char unit_str[3][6] = { { " Bps" }, { "KBps" }, { "MBps" }, };
 
@@ -20,9 +22,10 @@ struct network {
   struct ifmibdata data;
   struct timeval tv_nm1, tv_n, tv_delta;
   
-  // For nettop-based download tracking
+  // For optimized download tracking
   uint64_t prev_download_bytes;
   int first_measurement;
+  char ifname[IFNAMSIZ];
 
   int up;
   int down;
@@ -40,6 +43,8 @@ static inline void network_init(struct network* net, char* ifname) {
   memset(net, 0, sizeof(struct network));
   net->first_measurement = 1;
   net->prev_download_bytes = 0;
+  strncpy(net->ifname, ifname, IFNAMSIZ - 1);
+  net->ifname[IFNAMSIZ - 1] = '\0';
 
   static int count_option[] = { CTL_NET, PF_LINK, NETLINK_GENERIC, IFMIB_SYSTEM, IFMIB_IFCOUNT };
   uint32_t interface_count = 0;
@@ -55,13 +60,20 @@ static inline void network_init(struct network* net, char* ifname) {
   }
 }
 
-static inline uint64_t get_download_bytes() {
+static inline uint64_t get_download_bytes_fast(const char* ifname) {
+  static char cmd[256] = {0};
+  static int cmd_initialized = 0;
   FILE *fp;
-  char buffer[256];
+  char buffer[64];
   uint64_t total_bytes = 0;
   
-  // Use nettop to get total bytes_in from all processes
-  fp = popen("nettop -P -x -l 1 -J bytes_in 2>/dev/null | awk '{sum+=$2} END {print sum+0}'", "r");
+  // Initialize command once
+  if (!cmd_initialized) {
+    snprintf(cmd, sizeof(cmd), "nettop -P -x -l 1 -J bytes_in 2>/dev/null | tail -n +2 | awk '{sum+=$2} END {print sum+0}'");
+    cmd_initialized = 1;
+  }
+  
+  fp = popen(cmd, "r");
   if (fp != NULL) {
     if (fgets(buffer, sizeof(buffer), fp) != NULL) {
       total_bytes = strtoull(buffer, NULL, 10);
@@ -104,8 +116,8 @@ static inline void network_update(struct network* net) {
     }
   }
 
-  // Handle download using nettop
-  uint64_t current_download_bytes = get_download_bytes();
+  // Handle download using optimized getifaddrs
+  uint64_t current_download_bytes = get_download_bytes_fast(net->ifname);
   
   if (net->first_measurement) {
     net->prev_download_bytes = current_download_bytes;
