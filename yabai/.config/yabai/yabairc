@@ -12,12 +12,20 @@ yabai -m signal --add event=display_removed action="sleep 1 && $HOME/.config/yab
 yabai -m signal --add event=window_created action="sketchybar --trigger windows_on_spaces"
 yabai -m signal --add event=window_destroyed action="sketchybar --trigger windows_on_spaces"
 
+# focus window after space changes
+# this is useful when switching spaces with the mouse wheel
 yabai -m signal --add event=space_changed \
   action="yabai -m window --focus \$(yabai -m query --windows --space | jq .[0].id)"
+# also trigger sketchybar to update the focused window
+yabai -m signal --add event=space_changed \
+  action="sketchybar --trigger windows_on_spaces"
 
 # focus window after active display changes
 yabai -m signal --add event=display_changed \
   action="yabai -m window --focus \$(yabai -m query --windows --space | jq .[0].id)"
+# also trigger sketchybar to update the focused window
+yabai -m signal --add event=display_changed \
+  action="sketchybar --trigger windows_on_spaces"
 
 
 yabai -m config external_bar               all:32:0     \
