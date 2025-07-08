@@ -27,6 +27,8 @@ yabai -m signal --add event=display_changed \
 yabai -m signal --add event=display_changed \
   action="sketchybar --trigger windows_on_spaces"
 
+yabai -m signal --add event=window_moved \
+  action="sketchybar --trigger windows_on_spaces"
 
 yabai -m config external_bar               all:32:0     \
                 window_border              on           \
