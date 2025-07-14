@@ -5,7 +5,7 @@
 
 # Configuration
 MIN_SPACES_PER_DISPLAY=3
-MAX_TOTAL_SPACES=12
+MAX_TOTAL_SPACES=10
 
 # Colors for logging
 RED='\033[0;31m'
@@ -80,17 +80,31 @@ calculate_distribution() {
         return
     fi
     
-    # Calculate base spaces per display and remainder
-    local base_spaces=$((total_spaces / display_count))
-    local remainder=$((total_spaces % display_count))
-    
-    # Ensure minimum spaces per display
-    if [ $base_spaces -lt $MIN_SPACES_PER_DISPLAY ]; then
-        base_spaces=$MIN_SPACES_PER_DISPLAY
-        total_spaces=$((display_count * MIN_SPACES_PER_DISPLAY))
+    # Enforce maximum total spaces
+    if [ $total_spaces -gt $MAX_TOTAL_SPACES ]; then
+        total_spaces=$MAX_TOTAL_SPACES
     fi
     
-    echo "$base_spaces $remainder $total_spaces"
+    # Always aim for maximum spaces distributed evenly
+    local target_total=$MAX_TOTAL_SPACES
+    local base_spaces=$((target_total / display_count))
+    local remainder=$((target_total % display_count))
+    
+    # Ensure we don't go below minimum per display
+    if [ $base_spaces -lt $MIN_SPACES_PER_DISPLAY ]; then
+        base_spaces=$MIN_SPACES_PER_DISPLAY
+        target_total=$((base_spaces * display_count))
+        remainder=0
+        
+        # If minimum requirement exceeds maximum, use maximum and distribute evenly
+        if [ $target_total -gt $MAX_TOTAL_SPACES ]; then
+            target_total=$MAX_TOTAL_SPACES
+            base_spaces=$((target_total / display_count))
+            remainder=$((target_total % display_count))
+        fi
+    fi
+    
+    echo "$base_spaces $remainder $target_total"
 }
 
 # Move windows from a space before destroying it
@@ -170,6 +184,67 @@ remove_spaces_from_display() {
     return $removed
 }
 
+# Remove excess spaces globally when total exceeds maximum
+remove_excess_spaces_globally() {
+    local current_total=$(get_total_space_count)
+    local excess=$((current_total - MAX_TOTAL_SPACES))
+    
+    if [ $excess -le 0 ]; then
+        return 0
+    fi
+    
+    log "Total spaces ($current_total) exceeds maximum ($MAX_TOTAL_SPACES). Removing $excess spaces..."
+    
+    # Get all spaces sorted by: empty spaces first, then by newest (highest index)
+    # Also avoid removing currently focused space
+    local current_space=$(yabai -m query --spaces --space | jq -r '.index' 2>/dev/null || echo "")
+    local space_data=($(yabai -m query --spaces | jq -r ".[] | select(.index != $current_space) | \"\(.id):\(.index):\((.windows | length)):\(.display)\"" | sort -t: -k3,3n -k2,2nr))
+    
+    local removed=0
+    for space_info in "${space_data[@]}"; do
+        if [ $removed -ge $excess ]; then
+            break
+        fi
+        
+        IFS=':' read -r space_id space_index window_count display_index <<< "$space_info"
+        
+        # Skip if this is the only space on its display
+        local spaces_on_display=$(yabai -m query --spaces | jq "[.[] | select(.display == $display_index)] | length")
+        if [ $spaces_on_display -le 1 ]; then
+            continue
+        fi
+        
+        # Skip if this space is currently visible
+        local is_visible=$(yabai -m query --spaces | jq -r ".[] | select(.id == $space_id) | .\"is-visible\"")
+        if [ "$is_visible" = "true" ]; then
+            continue
+        fi
+        
+        # If space has windows, move them to the first space on the same display
+        if [ $window_count -gt 0 ]; then
+            local target_space_id=$(yabai -m query --spaces | jq -r ".[] | select(.display == $display_index and .id != $space_id) | .id" | head -n 1)
+            if [ -n "$target_space_id" ] && [ "$target_space_id" != "null" ]; then
+                move_windows_from_space $space_id $target_space_id
+                # Wait a bit for windows to move
+                sleep 0.2
+            fi
+        fi
+        
+        # Try to remove the space
+        if yabai -m space $space_id --destroy 2>/dev/null; then
+            log "Globally removed excess space $space_id (index $space_index) from display $display_index"
+            ((removed++))
+            # Wait a bit between removals to avoid race conditions
+            sleep 0.1
+        else
+            warn "Failed to remove excess space $space_id from display $display_index"
+        fi
+    done
+    
+    success "Removed $removed excess spaces globally"
+    return $removed
+}
+
 # Redistribute spaces across all displays
 redistribute_spaces() {
     log "Starting space redistribution..."
@@ -182,6 +257,13 @@ redistribute_spaces() {
     if [ $display_count -eq 0 ]; then
         error "No displays found!"
         return 1
+    fi
+    
+    # First, remove excess spaces if total exceeds maximum
+    if [ $total_spaces -gt $MAX_TOTAL_SPACES ]; then
+        remove_excess_spaces_globally
+        total_spaces=$(get_total_space_count)
+        log "After removing excess spaces: $total_spaces total spaces"
     fi
     
     # Calculate optimal distribution
@@ -214,6 +296,13 @@ redistribute_spaces() {
             remove_spaces_from_display $display_index $excess
         fi
     done
+    
+    # Final check: ensure we haven't exceeded maximum
+    local final_total=$(get_total_space_count)
+    if [ $final_total -gt $MAX_TOTAL_SPACES ]; then
+        warn "Final total ($final_total) still exceeds maximum. Removing excess..."
+        remove_excess_spaces_globally
+    fi
     
     # Update SketchyBar
     update_sketchybar
@@ -257,7 +346,15 @@ show_status() {
     local total_spaces=$(echo "$spaces" | jq 'length')
     local display_count=$(echo "$displays" | jq 'length')
     echo
-    echo "Total: $display_count displays, $total_spaces spaces"
+    echo "Total: $display_count displays, $total_spaces/$MAX_TOTAL_SPACES spaces"
+    
+    if [ $total_spaces -gt $MAX_TOTAL_SPACES ]; then
+        echo -e "${RED}⚠ Warning: Total spaces exceeds maximum limit!${NC}"
+    elif [ $total_spaces -eq $MAX_TOTAL_SPACES ]; then
+        echo -e "${YELLOW}📊 At maximum space limit${NC}"
+    else
+        echo -e "${GREEN}✓ Within space limits${NC}"
+    fi
 }
 
 # Monitor for display changes
