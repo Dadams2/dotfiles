@@ -1,144 +1,173 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-# Script to ensure each display has exactly 7 spaces
-# Monitors display changes and balances spaces accordingly
+# Keep spaces balanced per-display:
+# - 1 display  -> 8 spaces
+# - 2+ displays -> 4 spaces each
 
-SPACES_PER_DISPLAY=4
+set -u
+
+SINGLE_DISPLAY_SPACES=8
+MULTI_DISPLAY_SPACES=4
+
+log() {
+  printf '[%s] %s\n' "$(date '+%H:%M:%S')" "$1"
+}
+
+require_dependencies() {
+  command -v yabai >/dev/null 2>&1 || { echo "yabai not found in PATH"; exit 1; }
+  command -v jq >/dev/null 2>&1 || { echo "jq not found in PATH"; exit 1; }
+}
 
 get_display_count() {
-    yabai -m query --displays | jq 'length'
+  yabai -m query --displays | jq 'length'
+}
+
+get_target_spaces_per_display() {
+  local display_count="$1"
+  if [ "$display_count" -eq 1 ]; then
+    echo "$SINGLE_DISPLAY_SPACES"
+  else
+    echo "$MULTI_DISPLAY_SPACES"
+  fi
 }
 
 get_spaces_count_for_display() {
-    local display_index=$1
-    yabai -m query --spaces | jq "[.[] | select(.display == $display_index)] | length"
+  local display_index="$1"
+  yabai -m query --spaces | jq "[.[] | select(.display == $display_index)] | length"
 }
 
 create_spaces_for_display() {
-    local display_index=$1
-    local current_spaces=$2
-    local needed_spaces=$((SPACES_PER_DISPLAY - current_spaces))
-    
-    echo "Creating $needed_spaces spaces for display $display_index"
-    for ((i=1; i<=needed_spaces; i++)); do
-        yabai -m space --create $display_index
-    done
+  local display_index="$1"
+  local needed="$2"
+
+  [ "$needed" -le 0 ] && return 0
+  log "Display $display_index: creating $needed space(s)"
+  for _ in $(seq 1 "$needed"); do
+    yabai -m space --create "$display_index" >/dev/null 2>&1
+    sleep 0.05
+  done
 }
 
-remove_excess_spaces() {
-    local display_index=$1
-    local current_spaces=$2
-    local excess_spaces=$((current_spaces - SPACES_PER_DISPLAY))
-    
-    echo "Removing $excess_spaces excess spaces from display $display_index"
-    
-    local empty_space_ids=($(yabai -m query --spaces | jq -r ".[] | select(.display == $display_index and (.windows | length) == 0) | .id" | sort -n))
-    
-    local spaces_to_remove=0
-    if [ ${#empty_space_ids[@]} -gt 0 ]; then
-        spaces_to_remove=$((excess_spaces < ${#empty_space_ids[@]} ? excess_spaces : ${#empty_space_ids[@]}))
+move_windows_out_of_space() {
+  local source_space_id="$1"
+  local target_space_id="$2"
+
+  local window_ids
+  window_ids=$(yabai -m query --windows --space "$source_space_id" | jq -r '.[].id')
+  [ -z "$window_ids" ] && return 0
+
+  for window_id in $window_ids; do
+    yabai -m window "$window_id" --space "$target_space_id" >/dev/null 2>&1
+  done
+}
+
+remove_spaces_for_display() {
+  local display_index="$1"
+  local to_remove="$2"
+  local removed=0
+
+  [ "$to_remove" -le 0 ] && return 0
+  log "Display $display_index: removing $to_remove excess space(s)"
+
+  while [ "$removed" -lt "$to_remove" ]; do
+    local candidate
+    candidate=$(yabai -m query --spaces | jq -r "
+      [.[] | select(.display == $display_index)
+       | {id: .id, idx: .index, windows: (.windows | length)}]
+      | if length == 0 then empty
+        else
+          sort_by(.windows, -.idx)
+          | .[0]
+          | \"\(.id):\(.windows)\"
+        end
+    ")
+
+    [ -z "$candidate" ] && break
+
+    local source_space_id window_count
+    IFS=':' read -r source_space_id window_count <<< "$candidate"
+
+    local spaces_left
+    spaces_left=$(get_spaces_count_for_display "$display_index")
+    [ "$spaces_left" -le 1 ] && break
+
+    if [ "$window_count" -gt 0 ]; then
+      local target_space_id
+      target_space_id=$(yabai -m query --spaces | jq -r "
+        [.[] | select(.display == $display_index and .id != $source_space_id)]
+        | sort_by(.index)
+        | .[0].id
+      ")
+
+      [ -z "$target_space_id" ] || [ "$target_space_id" = "null" ] && break
+      move_windows_out_of_space "$source_space_id" "$target_space_id"
+      sleep 0.1
     fi
-    
-    echo "Found ${#empty_space_ids[@]} empty spaces, will remove $spaces_to_remove"
-    
-    for ((i=0; i<spaces_to_remove; i++)); do
-        local space_id=${empty_space_ids[$i]}
-        if [ -n "$space_id" ]; then
-            echo "Destroying empty space $space_id"
-            yabai -m space $space_id --destroy 2>/dev/null
-        fi
-    done
-    
-    local remaining_excess=$((excess_spaces - spaces_to_remove))
-    if [ $remaining_excess -gt 0 ]; then
-        echo "Warning: Could not remove $remaining_excess spaces because they contain windows"
+
+    if yabai -m space "$source_space_id" --destroy >/dev/null 2>&1; then
+      removed=$((removed + 1))
+      sleep 0.05
+    else
+      break
     fi
+  done
 }
 
 balance_spaces() {
-    local display_count=$(get_display_count)
-    echo "Balancing spaces across $display_count displays"
-    
-    local display_indices=($(yabai -m query --displays | jq -r '.[].index'))
-    
-    for display_index in "${display_indices[@]}"; do
-        local current_spaces=$(get_spaces_count_for_display $display_index)
-        echo "Display $display_index has $current_spaces spaces"
-        
-        if [ "$current_spaces" -lt "$SPACES_PER_DISPLAY" ]; then
-            create_spaces_for_display $display_index $current_spaces
-        elif [ "$current_spaces" -gt "$SPACES_PER_DISPLAY" ]; then
-            remove_excess_spaces $display_index $current_spaces
-        else
-            echo "Display $display_index already has the correct number of spaces"
-        fi
-    done
+  local display_count target
+  display_count=$(get_display_count)
+  [ "$display_count" -lt 1 ] && return 0
+
+  target=$(get_target_spaces_per_display "$display_count")
+  log "Balancing for $display_count display(s), target=$target per display"
+
+  local display_indices
+  display_indices=$(yabai -m query --displays | jq -r '.[].index' | sort -n)
+
+  local display_index
+  for display_index in $display_indices; do
+    local current
+    current=$(get_spaces_count_for_display "$display_index")
+    if [ "$current" -lt "$target" ]; then
+      create_spaces_for_display "$display_index" "$((target - current))"
+    elif [ "$current" -gt "$target" ]; then
+      remove_spaces_for_display "$display_index" "$((current - target))"
+    fi
+  done
 }
 
 get_display_config_hash() {
-    yabai -m query --displays | jq -c 'sort_by(.index) | [.[] | {index: .index, id: .id, uuid: .uuid}]' | shasum -a 256 | cut -d' ' -f1
+  yabai -m query --displays \
+    | jq -c 'sort_by(.index) | [.[] | {index: .index, id: .id, uuid: .uuid}]' \
+    | shasum -a 256 \
+    | cut -d' ' -f1
 }
 
 monitor_displays() {
-    local last_display_config=$(get_display_config_hash)
-    local last_display_count=$(get_display_count)
-    echo "$(date '+%Y-%m-%d %H:%M:%S') - Starting display monitor with $last_display_count displays"
-    echo "$(date '+%Y-%m-%d %H:%M:%S') - Initial display config hash: $last_display_config"
-    
-    while true; do
-        sleep 1
-        local current_display_config=$(get_display_config_hash)
-        local current_display_count=$(get_display_count)
-        
-        if [ "$current_display_config" != "$last_display_config" ]; then
-            echo "$(date '+%Y-%m-%d %H:%M:%S') - Display configuration changed!"
-            echo "$(date '+%Y-%m-%d %H:%M:%S') - Display count: $last_display_count -> $current_display_count"
-            echo "$(date '+%Y-%m-%d %H:%M:%S') - Config hash: $last_display_config -> $current_display_config"
-            
-            sleep 2
-            balance_spaces
-            balance_spaces
-            
-            last_display_config=$current_display_config
-            last_display_count=$current_display_count
-        fi
-    done
+  local last_hash current_hash
+  last_hash="$(get_display_config_hash)"
+  log "Watching display configuration changes..."
+
+  while true; do
+    sleep 1
+    current_hash="$(get_display_config_hash)"
+    if [ "$current_hash" != "$last_hash" ]; then
+      sleep 0.7
+      balance_spaces
+      # Run twice to settle after hot-plug events.
+      balance_spaces
+      last_hash="$current_hash"
+    fi
+  done
 }
 
 main() {
-    echo "$(date '+%Y-%m-%d %H:%M:%S') - Starting balance_spaces_between_displays.sh"
-    echo "$(date '+%Y-%m-%d %H:%M:%S') - Target: $SPACES_PER_DISPLAY spaces per display"
-    echo "$(date '+%Y-%m-%d %H:%M:%S') - PID: $$"
-    
-    if ! pgrep -x "yabai" > /dev/null; then
-        echo "$(date '+%Y-%m-%d %H:%M:%S') - Error: yabai is not running"
-        exit 1
-    fi
-    
-    if ! command -v jq &> /dev/null; then
-        echo "$(date '+%Y-%m-%d %H:%M:%S') - Error: jq is required but not installed"
-        echo "$(date '+%Y-%m-%d %H:%M:%S') - Install with: brew install jq"
-        exit 1
-    fi
-    
-    echo "$(date '+%Y-%m-%d %H:%M:%S') - Performing initial space balance..."
-    balance_spaces
-    
-    if [[ "$1" == "--monitor" ]] || [[ -n "$PM2_HOME" ]] || [[ -n "$pm_id" ]]; then
-        echo "$(date '+%Y-%m-%d %H:%M:%S') - Starting display monitor..."
-        monitor_displays
-    else
-        echo "$(date '+%Y-%m-%d %H:%M:%S') - Balance complete. Use --monitor flag to run continuously."
-    fi
+  require_dependencies
+  balance_spaces
+
+  if [ "${1:-}" = "--monitor" ]; then
+    monitor_displays
+  fi
 }
 
-cleanup() {
-    echo "$(date '+%Y-%m-%d %H:%M:%S') - Stopping display monitor..."
-    exit 0
-}
-
-trap cleanup SIGINT SIGTERM
-
-if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
-    main "$@"
-fi
+main "$@"

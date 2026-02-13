@@ -9,8 +9,9 @@ yabai -m signal --add event=dock_did_restart action="sudo yabai --load-sa"
 yabai -m signal --add event=window_focused action="sketchybar --trigger window_focus"
 yabai -m signal --add event=display_added action="sleep 2 && $HOME/.config/yabai/create_spaces.sh"
 yabai -m signal --add event=display_removed action="sleep 1 && $HOME/.config/yabai/create_spaces.sh"
-yabai -m signal --add event=window_created action="sketchybar --trigger windows_on_spaces"
-yabai -m signal --add event=window_destroyed action="sketchybar --trigger windows_on_spaces"
+sleep 1 && $HOME/.config/yabai/create_spaces.sh
+yabai -m signal --add event=window_created action="$HOME/.config/yabai/ultrawide_layout.sh 0.15; $HOME/.config/yabai/refresh_bar.sh 0.15"
+yabai -m signal --add event=window_destroyed action="$HOME/.config/yabai/ultrawide_layout.sh 0.15; $HOME/.config/yabai/refresh_bar.sh 0.15"
 
 # focus window after space changes
 # this is useful when switching spaces with the mouse wheel
@@ -18,17 +19,17 @@ yabai -m signal --add event=space_changed \
   action="yabai -m window --focus \$(yabai -m query --windows --space | jq .[0].id)"
 # also trigger sketchybar to update the focused window
 yabai -m signal --add event=space_changed \
-  action="sketchybar --trigger windows_on_spaces"
+  action="$HOME/.config/yabai/ultrawide_layout.sh 0.05; $HOME/.config/yabai/refresh_bar.sh 0.05"
 
 # focus window after active display changes
 yabai -m signal --add event=display_changed \
   action="yabai -m window --focus \$(yabai -m query --windows --space | jq .[0].id)"
 # also trigger sketchybar to update the focused window
 yabai -m signal --add event=display_changed \
-  action="sketchybar --trigger windows_on_spaces"
+  action="$HOME/.config/yabai/ultrawide_layout.sh 0.05; $HOME/.config/yabai/refresh_bar.sh 0.05"
 
 yabai -m signal --add event=window_moved \
-  action="sketchybar --trigger windows_on_spaces"
+  action="$HOME/.config/yabai/ultrawide_layout.sh 0.15; $HOME/.config/yabai/refresh_bar.sh 0.15"
 
 yabai -m config external_bar               all:32:0     \
                 window_border              on           \
