@@ -61,12 +61,7 @@ elif [ "$window_count" -ge 2 ]; then
     fi
   done
 
-  if [ "$window_count" -le 3 ]; then
-    set_space_layout 12 14 52 52 16
-  else
-    set_space_layout 8 10 24 24 10
-  fi
-
+  set_space_layout 12 14 52 52 16
   yabai -m space --balance
 else
   set_space_layout 12 14 52 52 16
