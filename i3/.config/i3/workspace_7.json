@@ -1,0 +1,21 @@
+{
+    "border": "pixel",
+    "current_border_width": 2,
+    "floating": "auto_off",
+    "geometry": {
+       "height": 1380,
+       "width": 1693,
+       "x": 1713,
+       "y": 287
+    },
+    "marks": [],
+    "name": "class-announcements - UWA-FSF-NOV-2022 - Slack",
+    "percent": 1,
+    "swallows": [
+       {
+       "class": "^Slack$"
+       }
+    ],
+    "type": "con"
+}
+
