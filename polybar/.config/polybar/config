@@ -1,0 +1,296 @@
+[colors]
+nord0 = #2E3440
+nord1 = #3B4252
+nord2 = #434C5E
+nord3 = #4C566A
+nord4 = #D8DEE9
+nord5 = #E5E9F0
+nord6 = #ECEFF4
+nord7 = #8FBCBB
+nord8 = #88C0D0
+nord9 = #81A1C1
+nord10 = #5E81AC
+nord11 = #BF616A
+nord12 = #D08770
+nord13 = #EBCB8B
+nord14 = #A3BE8C
+nord15 = #B48EAD
+
+[bar/mybar]
+
+
+override-redirect = true
+top = true
+fixed-center = true
+monitor = ${env:MONITOR:}
+width = 60%
+height = 35
+
+offset-x = 20%
+offset-y = 2px
+
+; Background ARGB color (e.g. #f00, #ff992a, #ddff1023)
+; background = #992E3440
+background = ${colors.nord1}
+
+; Foreground ARGB color (e.g. #f00, #ff992a, #ddff1023)
+foreground = ${colors.nord8}
+; foreground = #000
+
+line-size = 2
+line-color = #fff
+
+padding-right = 3
+
+module-margin = 1
+
+;font-0 = DejaVu Sans Mono for Powerline:style=Medium:size=7.5;2
+font-0 = Fira Code Nerd Font:size=8.5;1.5
+font-1 = Fira Code Nerd Font:size=9;3
+font-2 = Fira Code Nerd Font:style=Solid:size=8;2
+font-3 = Fira Code Nerd Font:size=10;3
+
+modules-left = rofi-run i3 xwindow
+modules-center = cpu
+; modules-right = wireless-network sep memory sep cpu sep pulseaudio sep bluetooth sep date
+
+modules-right = memory sep cpu sep pulseaudio date bluetooth dunst-toggle powermenu
+spacing = 0
+
+
+wm-name = i3
+wm-restack = i3
+
+; Available positions:
+;   left
+;   center
+;   right
+;   none
+tray-detached = false
+tray-offset-x = 2
+tray-offset-y = 0
+tray-padding = 2
+tray-maxsize = 20
+tray-scale = 1.0
+tray-position = center
+tray-background = ${colors.nord1}
+
+
+dpi-x = 135
+dpi-y = 135
+
+enable-ipc = true
+
+[module/i3]
+type = internal/i3
+
+pin-workspaces = true
+
+strip-wsnumbers = true
+
+index-sort = true
+
+enable-click = true
+
+enable-scroll = true
+
+wrapping-scroll = false
+
+reverse-scroll = false
+
+fuzzy-match = true
+
+
+label-unfocused = %index%
+label-unfocused-padding = 2
+label-unfocused-foreground = #D8DEE9
+
+label-focused = %index%
+label-focused-padding = 2
+label-focused-foreground = #D8DEE9
+label-focused-background = ${colors.nord3}
+label-focused-underline= ${colors.nord10}
+
+[module/xwindow]
+type = internal/xwindow
+label = %title:0:30:...%
+
+[module/pulseaudio]
+type = internal/pulseaudio
+
+format-volume = <label-volume> <bar-volume>
+label-volume =  VOL %percentage%%
+label-volume-foreground = ${colors.nord8}
+
+label-muted =  muted
+
+bar-volume-width = 10
+bar-volume-foreground-0 = ${colors.nord8}
+bar-volume-foreground-1 = ${colors.nord8}
+bar-volume-foreground-2 = ${colors.nord8}
+bar-volume-foreground-3 = ${colors.nord8}
+bar-volume-foreground-4 = ${colors.nord8}
+bar-volume-foreground-5 = ${colors.nord13}
+bar-volume-foreground-6 = ${colors.nord11}
+bar-volume-gradient = false
+bar-volume-indicator = |
+bar-volume-indicator-font = 2
+bar-volume-fill = ─
+bar-volume-fill-font = 2
+bar-volume-empty = ─
+bar-volume-empty-font = 2
+bar-volume-empty-foreground = ${colors.nord4}
+
+[module/date]
+type = internal/date
+
+; Seconds to sleep between updates
+interval = 1.0
+
+; See "http://en.cppreference.com/w/cpp/io/manip/put_time" for details on how to format the date string
+; NOTE: if you want to use syntax tags here you need to use %%{...}
+date = %a, %d %b
+
+; Optional time format
+time = %H:%M
+
+; if `date-alt` or `time-alt` is defined, clicking
+; the module will toggle between formats
+date-alt = %a, %d %b
+time-alt = %H:%M:%S
+
+label = %date% %time%
+label-font = 0
+label-foreground = 
+
+[module/wireless-network]
+type = internal/network
+interface = enp7s0
+
+label-connected = %essid%
+format-connected = <ramp-signal>
+label-connected-foreground = #A3BE8C
+
+format-disconnected = <label-disconnected>
+label-disconnected = 
+label-disconnected-foreground = #C33027
+
+ramp-signal-foreground = #A3BE8C
+ramp-signal-0 = 
+ramp-signal-1 = 
+ramp-signal-2 = 
+ramp-signal-3 = 
+ramp-signal-4 = 
+ramp-signal-5 = 
+
+[module/cpu]
+type = internal/cpu
+
+interval = 0.5
+
+label =  %percentage:2%%
+
+label-foreground = ${colors.nord8}
+
+[module/memory]
+type = internal/memory
+
+; Seconds to sleep between updates
+; Default: 1
+interval = 0.5
+format = <label>
+
+; Available tokens:
+;   %percentage_used% (default)
+;   %percentage_free%
+;   %gb_used%
+;   %gb_free%
+;   %gb_total%
+;   %mb_used%
+;   %mb_free%
+;   %mb_total%
+;   %percentage_swap_used%
+;   %percentage_swap_free%
+;   %mb_swap_total%
+;   %mb_swap_free%
+;   %mb_swap_used%
+;   %gb_swap_total%
+;   %gb_swap_free%
+;   %gb_swap_used%
+
+label = %gb_used%
+
+label-foreground = ${colors.nord8}
+
+[module/decor-glyph]
+type = custom/text
+content-foreground = #4C566A
+margin = 0
+
+[module/sep]
+inherit = module/decor-glyph
+content = "/"
+
+[module/bluetooth]
+type = custom/script
+exec = rofi-bluetooth --status
+interval = 1
+click-left = rofi-bluetooth &
+
+
+[module/powermenu]
+type = custom/menu
+
+expand-right = true
+
+format-spacing = 1
+
+label-open =  Power Menu
+label-open-foreground = ${colors.nord8}
+label-close =  Cancel
+label-close-foreground = ${colors.nord8}
+label-separator = |
+label-separator-foreground = ${colors.nord4}
+
+menu-0-0 = 
+menu-0-0-exec = #powermenu.open.1
+menu-0-1 = 
+menu-0-1-exec = #powermenu.open.2
+menu-0-2 = 
+menu-0-2-exec = #powermenu.open.3
+menu-0-3 = 
+menu-0-3-exec = #powermenu.open.4
+
+menu-1-0 = 
+menu-1-0-exec = #powermenu.open.0
+menu-1-1 = 
+menu-1-1-exec = betterlockscreen -l blur 1.0
+
+menu-2-0 = 
+menu-2-0-exec = #powermenu.open.0
+menu-2-1 = 
+menu-2-1-exec = systemctl suspend
+
+menu-3-0 = 
+menu-3-0-exec = #powermenu.open.0
+menu-3-1 = 
+menu-3-1-exec = reboot
+
+menu-4-0 = 
+menu-4-0-exec = #powermenu.open.0
+menu-4-1 = 
+menu-4-1-exec = poweroff
+
+[module/rofi-run]
+type = custom/text
+content = :>
+content-padding = 2
+click-left = /home/dadams/.config/polybar/scripts/rofi.sh
+
+[module/dunst-toggle]
+type = custom/ipc
+hook-0 = echo 
+hook-1 = echo 
+click-left = /home/dadams/.config/polybar/scripts/dunst.sh
+initial = 1
+
