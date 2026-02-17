@@ -1,0 +1,39 @@
+[user]
+	email = git@dadams2.com
+	name = David Adams
+[pull]
+	rebase = true
+[credential]
+	helper = cache
+	credentialStore = gpg
+[credential "https://dev.azure.com"]
+	useHttpPath = true
+[github]
+	user = dadams2
+[core]
+    pager = delta # better git diff
+	preloadindex = true # load index into memory to improve perf
+	compression = 9 # trade some cpu for faster network and a little disk
+[init]
+	defaultBranch = main
+[interactive]
+    diffFilter = delta --color-only
+[delta]
+    navigate = true    # use n and N to move between diff sections
+    light = false      # set to true if you're in a terminal w/ a light background color (e.g. the default macOS terminal)
+[merge]
+    conflictstyle = diff3
+[diff]
+    colorMoved = default
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+[commit]
+	gpgsign = false
+[status]
+	branch = true
+	showStash = true
+[rerere]
+	enabled = true
