@@ -124,7 +124,6 @@ fi
 
 
 
-alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 #color ls things
 #alias ll='colorls -la'
 #alias la='colorls -a'
