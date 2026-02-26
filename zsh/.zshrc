@@ -123,8 +123,6 @@ if command -v zoxide &> /dev/null
 fi
 
 
-# Define aliases.
-alias tree='tree -a -I .git'
 
 alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 #color ls things
