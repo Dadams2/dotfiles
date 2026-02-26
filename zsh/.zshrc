@@ -186,54 +186,6 @@ z4h bindkey z4h-fzf-history Ctrl+R
 setopt glob_dots     # no special treatment for file names with a leading dot
 setopt no_auto_menu  # require an extra TAB press to open the completion menu
 
-# Custom functions
-function cleandead {
-   TMPDIR=/tmp
-   DIR=$1
-   DSTRING='WARNING: com.dugeo.util.swing.DeadlockDetector$DeadlockException'
-   FILE=$(find $DIR -type f -printf "%T@ %p\n" | sort -n | tail -1 | cut -f2- -d" ")
-   echo $FILE
-   DATES=$(grep "$DSTRING" "$FILE" | awk '{print $1,$2}')
-   echo $DATES
-
-   cp -f "$FILE" $TMPDIR/tmpmove.tmp.0
-   while read dt tm; do
-      cp -f $TMPDIR/tmpmove.tmp.0 $TMPDIR/tmpmove.tmp.0.0
-      VARONE=$(echo "$dt $tm")
-      VARTWO=$(echo "$dt-$tm")
-      echo $VARONE
-      echo $VARTWO
-      sed -ri "s/$VARONE java.lang./$VARTWO java.lang./g" $TMPDIR/tmpmove.tmp.0.0
-      sed -ri "s/$VARONE//g" $TMPDIR/tmpmove.tmp.0.0
-      mv -f $TMPDIR/tmpmove.tmp.0.0 $TMPDIR/tmpmove.tmp.0
-   done < <(echo $DATES | xargs -n2)
-
-   clean $FILE
-}
-
-# Cleans a stacktrace (does not work if the stacktrace still has a date/time)
-function clean {
-   FILE=$1
-   TMPDIR=/tmp
-   grep -vwE '^\s+at\s.*model\.property\..*$' $TMPDIR/tmpmove.tmp.0 >$TMPDIR/tmpmove.tmp.1
-   grep -vwE '^.*Lambda\$[0123456789]+.*$' $TMPDIR/tmpmove.tmp.1 >$TMPDIR/tmpmove.tmp.2
-   grep -vwE '^.*DebugIfSlowEvent.debugIfSlowOnEDT.*$' $TMPDIR/tmpmove.tmp.2 >$TMPDIR/tmpmove.tmp.3
-   sed -r '/^\s+at\s.*$/ s/,\s/,/g' $TMPDIR/tmpmove.tmp.3 >$TMPDIR/tmpmove.tmp.4
-   mv -f $TMPDIR/tmpmove.tmp.4 "$FILE"
-   rm -f $TMPDIR/tmpmove.tmp.0 $TMPDIR/tmpmove.tmp.1 $TMPDIR/tmpmove.tmp.2 $TMPDIR/tmpmove.tmp.3 $TMPDIR/tmpmove.tmp.4
-}
-
-function wsync {
-  rsync -aP work:$1 .
-}
-
-
-function save_workspace {
-   i3-save-tree --workspace $1 > ~/.config/i3/workspace_$1.json
-sed -i 's|^\(\s*\)// "|\1"|g; /^\s*\/\//d' ~/.config/i3/workspace_$1.json
-   echo "Make sure to manually edit ~/.config/i3/workspace-$1.json"
-}
-
 # >>> mamba initialize >>>
 # !! Contents within this block are managed by 'mamba init' !!
 export MAMBA_EXE='/opt/homebrew/bin/micromamba';
