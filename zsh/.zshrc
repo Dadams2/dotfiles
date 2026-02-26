@@ -124,11 +124,6 @@ fi
 
 
 
-#color ls things
-#alias ll='colorls -la'
-#alias la='colorls -a'
-#alias lsg='colorls --gs -l'
-#alias ls='colorls'
 if command -v eza &> /dev/null
     then
         alias ls='eza'
