@@ -224,13 +224,6 @@ export GPG_TTY
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
-# bun
-export BUN_INSTALL="$HOME/.bun"
-export PATH="$BUN_INSTALL/bin:$PATH"
-
-export PATH="$HOME/.local/bin:$PATH"
-export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
-
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
 __conda_setup="$('/opt/homebrew/Caskroom/miniconda/base/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
@@ -245,7 +238,6 @@ else
 fi
 unset __conda_setup
 # <<< conda initialize <<<
-
 
 
 # BEGIN opam configuration
