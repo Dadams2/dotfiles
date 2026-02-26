@@ -178,13 +178,14 @@ export FZF_TMUX_OPTS=" -p90%,70% "
 source <(fzf --zsh)
 z4h bindkey z4h-fzf-history Ctrl+R
 
+forgejo-push() {
+  repo_name=$(basename "$(git rev-parse --show-toplevel 2>/dev/null)") || return 1
 
-# Add flags to existing aliases.
-# alias ls="${aliases[ls]:-ls} -A"
+  git remote add forgejo "ssh://git@code.dadams.org/dadams/${repo_name}" 2>/dev/null
 
-# Set shell options: http://zsh.sourceforge.net/Doc/Release/Options.html.
-setopt glob_dots     # no special treatment for file names with a leading dot
-setopt no_auto_menu  # require an extra TAB press to open the completion menu
+  git push -u forgejo "$(git branch --show-current)"
+}
+
 
 # >>> mamba initialize >>>
 # !! Contents within this block are managed by 'mamba init' !!
@@ -255,10 +256,3 @@ PERL_MB_OPT="--install_base \"/Users/DAADAMS/perl5\""; export PERL_MB_OPT;
 PERL_MM_OPT="INSTALL_BASE=/Users/DAADAMS/perl5"; export PERL_MM_OPT;
 
 
-forgejo-push() {
-  repo_name=$(basename "$(git rev-parse --show-toplevel 2>/dev/null)") || return 1
-
-  git remote add forgejo "ssh://git@code.dadams.org/dadams/${repo_name}" 2>/dev/null
-
-  git push -u forgejo "$(git branch --show-current)"
-}
