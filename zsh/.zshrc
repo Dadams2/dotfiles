@@ -256,3 +256,6 @@ PERL_MB_OPT="--install_base \"/Users/DAADAMS/perl5\""; export PERL_MB_OPT;
 PERL_MM_OPT="INSTALL_BASE=/Users/DAADAMS/perl5"; export PERL_MM_OPT;
 
 
+
+# Added by Antigravity
+export PATH="/Users/DAADAMS/.antigravity/antigravity/bin:$PATH"
