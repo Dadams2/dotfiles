@@ -1,0 +1,4 @@
+theme = nord
+alpha-blending = native
+background-opacity=0.9
+command = /bin/zsh -l -c "tmux attach || tmux"
