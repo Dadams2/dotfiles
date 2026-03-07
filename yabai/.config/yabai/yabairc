@@ -1,132 +1,48 @@
-#!/usr/bin/env sh
+#!/bin/bash
 
-# TODO: look at https://github.dev/dgrebb/dotfiles
-# Unload the macOS WindowManager process
-launchctl unload -F /System/Library/LaunchAgents/com.apple.WindowManager.plist > /dev/null 2>&1 &
 
-sudo yabai --load-sa
-yabai -m signal --add event=dock_did_restart action="sudo yabai --load-sa"
-yabai -m signal --add event=window_focused action="sketchybar --trigger window_focus"
-yabai -m signal --add event=display_added action="sleep 2 && $HOME/.config/yabai/create_spaces.sh"
-yabai -m signal --add event=display_removed action="sleep 1 && $HOME/.config/yabai/create_spaces.sh"
-sleep 1 && $HOME/.config/yabai/create_spaces.sh
-yabai -m signal --add event=window_created action="$HOME/.config/yabai/ultrawide_layout.sh 0.15; $HOME/.config/yabai/refresh_bar.sh 0.15"
-yabai -m signal --add event=window_destroyed action="$HOME/.config/yabai/ultrawide_layout.sh 0.15; $HOME/.config/yabai/refresh_bar.sh 0.15"
+# Some inspiration https://github.dev/dgrebb/dotfiles and https://github.dev/d12frosted/environment
 
-# focus window after space changes
-# this is useful when switching spaces with the mouse wheel
-yabai -m signal --add event=space_changed \
-  action="yabai -m window --focus \$(yabai -m query --windows --space | jq .[0].id)"
-# also trigger sketchybar to update the focused window
-yabai -m signal --add event=space_changed \
-  action="$HOME/.config/yabai/ultrawide_layout.sh 0.05; $HOME/.config/yabai/refresh_bar.sh 0.05"
+# Global settings
+yabai -m config \
+    external_bar all:32:0 \
+    window_placement second_child \
+    window_zoom_persist on \
+    window_shadow on \
+    window_opacity off \
+    insert_feedback_color 0xff9dd274 \
+    mouse_follows_focus on \
+    focus_follow_ouse autofocus \
+    mouse_modifier alt \
+    mouse_drop_action stack \
 
-# focus window after active display changes
-yabai -m signal --add event=display_changed \
-  action="yabai -m window --focus \$(yabai -m query --windows --space | jq .[0].id)"
-# also trigger sketchybar to update the focused window
-yabai -m signal --add event=display_changed \
-  action="$HOME/.config/yabai/ultrawide_layout.sh 0.05; $HOME/.config/yabai/refresh_bar.sh 0.05"
+# Space settings
+yabai -m config \
+    layout bsp \
+    split_type auto \
+    top_padding 6 \
+    bottom_padding 8 \
+    left_padding 8 \
+    right_padding 8 \
+    auto_balance off \
+    window_gap 6 \
 
-yabai -m signal --add event=window_moved \
-  action="$HOME/.config/yabai/ultrawide_layout.sh 0.15; $HOME/.config/yabai/refresh_bar.sh 0.15"
+# sensure we have the correct amount of spaces
+for _ in $(yabai -m query --spaces | jq '.[].index | select(. > 9)'); do
+  yabai -m space --destroy 10 
+done
 
-yabai -m config external_bar               all:32:0     \
-                window_border              on           \
-                mouse_follows_focus        on          \
-                focus_follows_mouse        autofocus    \
-                window_zoom_persist        off          \
-                window_placement           second_child \
-                window_topmost             off          \
-                window_shadow              float        \
-                window_opacity             off           \
-                window_opacity_duration    0.15         \
-                window_origin_display      focused        \
-                active_window_opacity      1.0          \
-                normal_window_opacity      0.95         \
-                window_border_width        2            \
-                window_border_hidpi        off          \
-                window_border_radius       11           \
-                window_animation_duration  0.22         \
-                active_window_border_color 0xffe1e3e4   \
-                normal_window_border_color 0xff2a2f38   \
-                insert_feedback_color      0xff9dd274   \
-                split_ratio                0.50         \
-                auto_balance               off          \
-                mouse_modifier             fn           \
-                mouse_action1              move         \
-                mouse_action2              resize       \
-                mouse_drop_action          swap         \
-                                                        \
-                top_padding                6           \
-                bottom_padding             8           \
-                left_padding               8           \
-                right_padding              8           \
-                window_gap                8 
-
-# Exclude problematic apps from being managed:
-yabai -m rule --add app="^(LuLu|Vimac|Calculator|Software Update|Dictionary|VLC|System Preferences|System Settings|zoom.us|Photo Booth|Archive Utility|Python|LibreOffice|App Store|Steam|Alfred|Activity Monitor)$" manage=off
+# exclusions
+yabai -m rule --add app="^(Calculator|Software Update|Dictionary|VLC|System Preferences|System Settings|zoom.us|Photo Booth|Archive Utility|Python|LibreOffice|App Store|Steam|Activity Monitor)$" manage=off
 yabai -m rule --add label="Finder" app="^Finder$" title="(Co(py|nnect)|Move|Info|Pref)" manage=off
 yabai -m rule --add label="Safari" app="^Safari$" title="^(General|(Tab|Password|Website|Extension)s|AutoFill|Se(arch|curity)|Privacy|Advance)$" manage=off
 yabai -m rule --add label="Firefox" app="^Firefox$" title="^(General|(Tab|Password|Website|Extension)s|AutoFill|Se(arch|curity)|Privacy|Advance)$" manage=off
 yabai -m rule --add label="About This Mac" app="System Information" title="About This Mac" manage=off
 yabai -m rule --add label="Select file to save to" app="^Inkscape$" title="Select file to save to" manage=off
-yabai -m rule --add app=System Preferences manage=off
-yabai -m rule --add app=System\ Preferences manage=off
 yabai -m rule --add app=Calculator manage=off
 
-yabai -m config layout bsp
+yabai -m signal --add event=dock_did_restart action="sudo yabai --load-sa"
+sudo yabai --load-sa
 
 
-
-echo "yabai configuration loaded.."
-
-
-
-#/usr/bin/env sh
-
-#
-# for this to work you must configure sudo such that
-# it will be able to run the command without password
-#
-# see this wiki page for information:
-#  - https://github.com/koekeishiya/yabai/wiki/Installing-yabai-(latest-release)#configure-scripting-addition
-#
-# yabai -m signal --add event=dock_did_restart action="sudo yabai --load-sa"
-# sudo yabai --load-sa
-#
-# Float Windows
-
-# echo "yabai configuration loaded.."
-
-# global settings
-# yabai -m config                                 \
-#   external_bar               on:40:0       \
-#   menubar_opacity            0.8            \
-#   mouse_follows_focus        on             \
-#   focus_follows_mouse        autofocus      \
-#   display_arrangement_order  default        \
-#   window_origin_display      default        \
-#   window_placement           second_child   \
-#   window_zoom_persist        on             \
-#   window_shadow              on             \
-#   window_animation_duration  0.0            \
-#   window_animation_easing    ease_out_circ  \
-#   window_opacity_duration    0.0            \
-#   active_window_opacity      1.0            \
-#   normal_window_opacity      0.90           \
-#   window_opacity             off            \
-#   insert_feedback_color      0xffd75f5f     \
-#   split_ratio                0.50           \
-#   split_type                 auto           \
-#   auto_balance               off            \
-#   top_padding                8              \
-#   bottom_padding             11             \
-#   left_padding               11             \
-#   right_padding              11             \
-#   window_gap                 06             \
-#   layout                     bsp            \
-#   mouse_modifier             alt             \
-#   mouse_action1              move           \
-#   mouse_action2              resize         \
-#   mouse_drop_action          swap
+printf "\033[0;32m✓ Yabai configuration loaded!\033[0m\n\n"
