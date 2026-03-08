@@ -183,7 +183,7 @@ forgejo-push() {
 
   git remote add forgejo "ssh://git@code.dadams.org/dadams/${repo_name}" 2>/dev/null
 
-  git push -u forgejo "$(git branch --show-current)"
+  git push --all -u forgejo --follow-tags
 }
 
 
