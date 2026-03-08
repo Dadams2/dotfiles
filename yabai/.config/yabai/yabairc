@@ -12,7 +12,7 @@ yabai -m config \
     window_opacity off \
     insert_feedback_color 0xff9dd274 \
     mouse_follows_focus on \
-    focus_follow_ouse autofocus \
+    focus_follows_mouse autofocus \
     mouse_modifier alt \
     mouse_drop_action stack \
 
@@ -28,9 +28,9 @@ yabai -m config \
     window_gap 6 \
 
 # sensure we have the correct amount of spaces
-for _ in $(yabai -m query --spaces | jq '.[].index | select(. > 9)'); do
-  yabai -m space --destroy 10 
-done
+# for _ in $(yabai -m query --spaces | jq '.[].index | select(. > 9)'); do
+#   yabai -m space --destroy 10 
+# done
 
 # exclusions
 yabai -m rule --add app="^(Calculator|Software Update|Dictionary|VLC|System Preferences|System Settings|zoom.us|Photo Booth|Archive Utility|Python|LibreOffice|App Store|Steam|Activity Monitor)$" manage=off
@@ -40,6 +40,8 @@ yabai -m rule --add label="Firefox" app="^Firefox$" title="^(General|(Tab|Passwo
 yabai -m rule --add label="About This Mac" app="System Information" title="About This Mac" manage=off
 yabai -m rule --add label="Select file to save to" app="^Inkscape$" title="Select file to save to" manage=off
 yabai -m rule --add app=Calculator manage=off
+
+source $HOME/.config/yabai/_signals.sh
 
 yabai -m signal --add event=dock_did_restart action="sudo yabai --load-sa"
 sudo yabai --load-sa
