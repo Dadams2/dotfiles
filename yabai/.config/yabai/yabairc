@@ -27,11 +27,6 @@ yabai -m config \
     auto_balance off \
     window_gap 6 \
 
-# sensure we have the correct amount of spaces
-# for _ in $(yabai -m query --spaces | jq '.[].index | select(. > 9)'); do
-#   yabai -m space --destroy 10 
-# done
-
 # exclusions
 yabai -m rule --add app="^(Calculator|Software Update|Dictionary|VLC|System Preferences|System Settings|zoom.us|Photo Booth|Archive Utility|Python|LibreOffice|App Store|Steam|Activity Monitor)$" manage=off
 yabai -m rule --add label="Finder" app="^Finder$" title="(Co(py|nnect)|Move|Info|Pref)" manage=off
