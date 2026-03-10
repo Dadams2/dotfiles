@@ -8,7 +8,7 @@ export PATH="$HOME/.local/bin:$PATH"
 if ! command -v stow &>/dev/null; then
     tmp=$(mktemp -d)
     curl -fsSL https://ftp.gnu.org/gnu/stow/stow-2.4.0.tar.gz | tar -xz -C "$tmp"
-    cd "$tmp/stow-2.4.0" && ./configure --prefix="$HOME/.local" -q && make -s && make install -s
+    (cd "$tmp/stow-2.4.0" && ./configure --prefix="$HOME/.local" -q && make -s && make install -s)
     rm -rf "$tmp"
 fi
 
