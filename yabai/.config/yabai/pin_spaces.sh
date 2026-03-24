@@ -41,7 +41,7 @@ case "$MACHINE" in
   *)
     # Single display / laptop-only
     PIN_DISPLAYS=(
-      "ANY|music:float,web:bsp,work:bsp,code:bsp"
+      "ANY|music:float,web:bsp,work:bsp,code:bsp,office:bsp,notes:bsp,terminal:bsp"
     )
     ;;
 esac
