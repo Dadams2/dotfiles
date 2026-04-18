@@ -113,13 +113,22 @@ layout_space() {
 
   else
     # 2+ windows — unfloat any floating, tile with BSP
-    for fid in $floating_ids; do
-      yabai -m window "$fid" --toggle float 2>/dev/null
-    done
+    local had_floating=0
+    if [ -n "$floating_ids" ]; then
+      had_floating=1
+      for fid in $floating_ids; do
+        yabai -m window "$fid" --toggle float 2>/dev/null
+      done
+    fi
 
     yabai -m space "$space_index" --padding "abs:${PAD_MULTI}"
     yabai -m space "$space_index" --gap "abs:${GAP_MULTI}"
-    yabai -m space "$space_index" --balance
+
+    # Only rebalance when normalizing a prior single-window floating state.
+    # Running balance on every space/display focus change reshuffles the tree.
+    if [ "$had_floating" -eq 1 ]; then
+      yabai -m space "$space_index" --balance
+    fi
   fi
 }
 

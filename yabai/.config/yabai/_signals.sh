@@ -46,8 +46,6 @@ yabai -m signal --add label=pin_display_added \
   event=display_added action="$PIN_SCRIPT"
 yabai -m signal --add label=pin_display_removed \
   event=display_removed action="$PIN_SCRIPT"
-yabai -m signal --add label=pin_display_changed \
-  event=display_changed action="$PIN_SCRIPT"
 
 # run once at startup
 "$PIN_SCRIPT" &
