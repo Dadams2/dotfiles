@@ -144,52 +144,53 @@
 # change window focus within space
 # alt - p : echo $PATH
 
-# Navigation
+
+#  _ __ ___  _   _    ___ ___  _ __  / _(_) __ _ 
+# | '_ ` _ \| | | |  / __/ _ \| '_ \| |_| |/ _` |
+# | | | | | | |_| | | (_| (_) | | | |  _| | (_| |
+# |_| |_| |_|\__, |  \___\___/|_| |_|_| |_|\__, |
+#            |___/                         |___/ 
+
+# Moving windows and navigation
 alt - h : yabai -m window --focus west || yabai -m display --focus west
 alt - j : yabai -m window --focus south || yabai -m display --focus south
 alt - k : yabai -m window --focus north || yabai -m display --focus north
 alt - l : yabai -m window --focus east || yabai -m display --focus east
 
-alt - a: yabai -m display --focus west
-alt - f: yabai -m display --focus east
-alt - d: yabai -m display --focus south
-alt - s: yabai -m display --focus north
-
-# Moving windows
 alt + shift - h : yabai -m window --swap west  || $(yabai -m window --display west; yabai -m display --focus west)
 alt + shift - j : yabai -m window --swap south || $(yabai -m window --display south; yabai -m display --focus south)
 alt + shift - k : yabai -m window --swap north || $(yabai -m window --display north; yabai -m display --focus north)
 alt + shift - l : yabai -m window --swap east  || $(yabai -m window --display east; yabai -m display --focus east)
 
-# move window and split
-# ctrl + alt - j : yabai -m window --warp south
-# ctrl + alt - k : yabai -m window --warp north
-# ctrl + alt - h : yabai -m window --warp west
-# ctrl + alt - l : yabai -m window --warp east
-
 # move window to display left and right
-shift + alt - a : yabai -m window --display west; yabai -m display --focus west;
-shift + alt - f : yabai -m window --display east; yabai -m display --focus east;
-shift + alt - s : yabai -m window --display west; yabai -m display --focus north;
-shift + alt - d : yabai -m window --display east; yabai -m display --focus south;
+# alt - a: yabai -m display --focus west
+# alt - f: yabai -m display --focus east
+# alt - d: yabai -m display --focus south
+# alt - s: yabai -m display --focus north
+
+# shift + alt - a : yabai -m window --display west; yabai -m display --focus west;
+# shift + alt - f : yabai -m window --display east; yabai -m display --focus east;
+# shift + alt - s : yabai -m window --display west; yabai -m display --focus north;
+# shift + alt - d : yabai -m window --display east; yabai -m display --focus south;
 
 # fullscreen things
-shift + alt - m : yabai -m window --toggle zoom-fullscreen
+alt - f : yabai -m window --toggle zoom-fullscreen
 shift + alt - f : yabai -m window --toggle native-fullscreen
 
 # Equalize size of windows
 shift + alt - e : yabai -m space --balance
 
-alt - 1 : yabai -m space --focus 1
-alt - 2 : yabai -m space --focus 2
-alt - 3 : yabai -m space --focus 3
-alt - 4 : yabai -m space --focus 4
-alt - 5 : yabai -m space --focus 5
-alt - 6 : yabai -m space --focus 6
-alt - 7 : yabai -m space --focus 7
-alt - 8 : yabai -m space --focus 8
-alt - 9 : yabai -m space --focus 9
-alt - 0  : yabai -m space --focus 10
+# Focus spaces
+alt - 1 : yabai -m space --focus 1;
+alt - 2 : yabai -m space --focus 2;
+alt - 3 : yabai -m space --focus 3;
+alt - 4 : yabai -m space --focus 4;
+alt - 5 : yabai -m space --focus 5;
+alt - 6 : yabai -m space --focus 6;
+alt - 7 : yabai -m space --focus 7;
+alt - 8 : yabai -m space --focus 8;
+alt - 9 : yabai -m space --focus 9;
+alt - 0  : yabai -m space --focus 10;
 
 # move window to space #
 shift + alt - 1 : yabai -m window --space 1;
@@ -199,17 +200,18 @@ shift + alt - 4 : yabai -m window --space 4;
 shift + alt - 5 : yabai -m window --space 5;
 shift + alt - 6 : yabai -m window --space 6;
 shift + alt - 7 : yabai -m window --space 7;
-shift + alt - 8 : yabai -m window --space 8
-shift + alt - 9 : yabai -m window --space 9
-shift + alt - 0 : yabai -m window --space 10
+shift + alt - 8 : yabai -m window --space 8;
+shift + alt - 9 : yabai -m window --space 9;
+shift + alt - 0 : yabai -m window --space 10;
 
 # move focus container to workspace
-# shift + alt - m : yabai -m window --space last; yabai -m space --focus last
 shift + alt - p : yabai -m window --space prev; yabai -m space --focus prev
 shift + alt - n : yabai -m window --space next; yabai -m space --focus next
 
+# Move between workspaces
 alt - p : yabai -m space --focus prev
 alt - n : yabai -m space --focus next
+alt - m : yabai -m space --focus recent
 
 # Resize windows
 lctrl + alt - h : yabai -m window --resize left:-50:0; \
@@ -226,7 +228,6 @@ lctrl + alt - l : yabai -m window --resize right:50:0; \
 lctrl + alt - g : yabai -m space --toggle padding; yabai -m space --toggle gap
 
 # Rotate windows clockwise and anticlockwise
-alt - r         : yabai -m space --rotate 270
 shift + alt - r : yabai -m space --rotate 90
 
 # Rotate on X and Y Axis
@@ -245,22 +246,15 @@ shift + alt - space : \
     yabai -m window --toggle border
 
 # open programs
-# cmd - return : open -n -a "Kitty"
-cmd + shift - return : open -n -a "Firefox"
-
-# close window
-alt - q : yabai -m window --close
+alt - q : open -n -a "Ghostty"
+alt - w : open -n -a "Firefox"
+alt - e : open -a "Finder"
+alt - r : open -a "Raycast"
 
 # toggle window parent zoom
 alt - d : yabai -m window --focus mouse && \
           yabai -m window --toggle zoom-parent
 
-# toggle window fullscreen zoom
-alt - f : yabai -m window --focus mouse && \
-          yabai -m window --toggle zoom-fullscreen
-
-# toggle window native fullscreen
-shift + alt - f : yabai -m window --toggle native-fullscreen
 
 # float / unfloat window and center on screen
 alt - t : yabai -m window --toggle float;\
