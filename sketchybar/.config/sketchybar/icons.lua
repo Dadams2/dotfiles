@@ -41,6 +41,16 @@ local icons = {
       forward = "􀊌",
       play_pause = "􀊈",
     },
+    moon = {
+      new_moon = "",
+      waxing_crescent = "",
+      first_quarter = "",
+      waxing_gibbous = "",
+      full_moon = "",
+      waning_gibbous = "",
+      last_quarter = "",
+      waning_crescent = "",
+    },
   },
 
   -- Alternative NerdFont icons
@@ -49,7 +59,7 @@ local icons = {
     loading = "",
     apple = "",
     gear = "",
-    cpu = "",
+    cpu = "",
     clipboard = "Missing Icon",
 
     switch = {
@@ -82,6 +92,16 @@ local icons = {
       back = "",
       forward = "",
       play_pause = "",
+    },
+    moon = {
+      new_moon = "",
+      waxing_crescent = "",
+      first_quarter = "",
+      waxing_gibbous = "",
+      full_moon = "",
+      waning_gibbous = "",
+      last_quarter = "",
+      waning_crescent = "",
     },
   },
 }

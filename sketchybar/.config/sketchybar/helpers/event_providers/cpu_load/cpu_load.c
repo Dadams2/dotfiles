@@ -19,8 +19,15 @@ int main (int argc, char** argv) {
 
   char trigger_message[512];
   for (;;) {
+    bool had_prev_sample = cpu.has_prev_load;
+
     // Acquire new info
     cpu_update(&cpu);
+
+    if (!had_prev_sample) {
+      usleep(update_freq * 1000000);
+      continue;
+    }
 
     // Prepare the event message
     snprintf(trigger_message,

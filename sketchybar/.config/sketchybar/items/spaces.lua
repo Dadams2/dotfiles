@@ -1,177 +1,152 @@
 local colors = require("colors")
-local icons = require("icons")
 local settings = require("settings")
 local app_icons = require("helpers.app_icons")
 
-local spaces = {}
+local function trim(value)
+  if not value then
+    return ""
+  end
 
-for i = 1, 12, 1 do
-  local space = sbar.add("space", "space." .. i, {
-    space = i,
+  return (value:gsub("^%s+", ""):gsub("%s+$", ""))
+end
+
+local function command_output(command)
+  local handle = io.popen(command)
+  if not handle then
+    return ""
+  end
+
+  local output = handle:read("*a")
+  handle:close()
+
+  return trim(output)
+end
+
+local function resolve_space_ids()
+  local output = command_output("yabai -m query --spaces | jq -r '.[] | \"\\(.index) \\(.display)\"'")
+  local spaces = {}
+
+  for line in output:gmatch("[^\r\n]+") do
+    local space_id, display_id = line:match("^(%d+)%s+(%d+)$")
+    if space_id and display_id then
+      table.insert(spaces, {
+        id = tonumber(space_id),
+        display = tonumber(display_id),
+      })
+    end
+  end
+
+  if #spaces == 0 then
+    for i = 1, 7, 1 do
+      table.insert(spaces, { id = i })
+    end
+  end
+
+  return spaces
+end
+
+local function current_space_id()
+  return tonumber(command_output("yabai -m query --spaces --space | jq -r '.index'"))
+end
+
+local function space_style(selected)
+  return {
     icon = {
-      font = { family = settings.font.numbers },
-      string = i,
-      padding_left = 15,
-      padding_right = 8,
-      color = colors.white,
-      highlight_color = colors.red,
+      color = selected and colors.black or colors.white,
     },
     label = {
-      padding_right = 20,
-      color = colors.grey,
-      highlight_color = colors.white,
-      font = "sketchybar-app-font:Regular:16.0",
+      color = selected and colors.black or colors.grey,
+    },
+    background = {
+      color = selected and colors.item.current_space or colors.item.bg,
+    },
+  }
+end
+
+local spaces = {}
+local selected_space = current_space_id()
+
+for _, space_config in ipairs(resolve_space_ids()) do
+  local space_id = space_config.id
+  local selected = space_id == selected_space
+  local space = sbar.add("space", "space." .. space_id, {
+    space = space_id,
+    display = space_config.display,
+    position = "left",
+    icon = {
+      string = tostring(space_id),
+      font = {
+        family = settings.font.numbers,
+        style = settings.font.style_map["Bold"],
+        size = 13.0,
+      },
+      color = selected and colors.black or colors.white,
+      padding_left = 9,
+      padding_right = 9,
+    },
+    label = {
+      string = " —",
+      color = selected and colors.black or colors.grey,
+      font = "sketchybar-app-font:Regular:12.0",
+      padding_left = 0,
+      padding_right = 7,
       y_offset = -1,
     },
-    padding_right = 1,
-    padding_left = 1,
+    padding_left = 2,
+    padding_right = 2,
     background = {
-      color = colors.bg1,
-      border_width = 1,
-      height = 26,
-      border_color = colors.black,
+      color = selected and colors.item.current_space or colors.item.bg,
+      height = settings.defaults.background.height,
+      corner_radius = settings.defaults.background.corner_radius,
+      border_width = 0,
     },
-    popup = { background = { border_width = 5, border_color = colors.black } }
   })
 
-  spaces[i] = space
-
-  -- Single item bracket for space items to achieve double border on highlight
-  local space_bracket = sbar.add("bracket", { space.name }, {
-    background = {
-      color = colors.transparent,
-      border_color = colors.bg2,
-      height = 28,
-      border_width = 2
-    }
-  })
-
-  -- Padding space
-  sbar.add("space", "space.padding." .. i, {
-    space = i,
-    script = "",
-    width = settings.group_paddings,
-  })
-
-  local space_popup = sbar.add("item", {
-    position = "popup." .. space.name,
-    padding_left= 5,
-    padding_right= 0,
-    background = {
-      drawing = true,
-      image = {
-        corner_radius = 9,
-        scale = 0.2
-      }
-    }
-  })
+  spaces[space_id] = space
 
   space:subscribe("space_change", function(env)
-    local selected = env.SELECTED == "true"
-    local color = selected and colors.grey or colors.bg2
-    space:set({
-      icon = { highlight = selected, },
-      label = { highlight = selected },
-      background = { border_color = selected and colors.black or colors.bg2 }
-    })
-    space_bracket:set({
-      background = { border_color = selected and colors.grey or colors.bg2 }
-    })
+    space:set(space_style(env.SELECTED == "true"))
   end)
 
   space:subscribe("mouse.clicked", function(env)
-    if env.BUTTON == "other" then
-      space_popup:set({ background = { image = "space." .. env.SID } })
-      space:set({ popup = { drawing = "toggle" } })
-    else
-      local op = (env.BUTTON == "right") and "--destroy" or "--focus"
-      sbar.exec("yabai -m space " .. op .. " " .. env.SID)
-    end
-  end)
-
-  space:subscribe("mouse.exited", function(_)
-    space:set({ popup = { drawing = false } })
+    local op = (env.BUTTON == "right") and "--destroy" or "--focus"
+    sbar.exec("yabai -m space " .. op .. " " .. env.SID)
   end)
 end
 
-local space_window_observer = sbar.add("item", {
+local space_window_observer = sbar.add("item", "spaces.observer", {
   drawing = false,
   updates = true,
-})
-
-local spaces_indicator = sbar.add("item", {
-  padding_left = -3,
-  padding_right = 0,
-  icon = {
-    padding_left = 8,
-    padding_right = 9,
-    color = colors.grey,
-    string = icons.switch.on,
-  },
-  label = {
-    width = 0,
-    padding_left = 0,
-    padding_right = 8,
-    string = "Spaces",
-    color = colors.bg1,
-  },
-  background = {
-    color = colors.with_alpha(colors.grey, 0.0),
-    border_color = colors.with_alpha(colors.bg1, 0.0),
-  }
 })
 
 space_window_observer:subscribe("space_windows_change", function(env)
   local icon_line = ""
   local no_app = true
-  for app, count in pairs(env.INFO.apps) do
+
+  for app, _ in pairs(env.INFO.apps) do
     no_app = false
     local lookup = app_icons[app]
-    local icon = ((lookup == nil) and app_icons["Default"] or lookup)
+    local icon = lookup or app_icons["Default"]
     icon_line = icon_line .. icon
   end
 
-  if (no_app) then
+  if no_app then
     icon_line = " —"
   end
-  sbar.animate("tanh", 10, function()
-    spaces[env.INFO.space]:set({ label = icon_line })
-  end)
-end)
 
-spaces_indicator:subscribe("swap_menus_and_spaces", function(env)
-  local currently_on = spaces_indicator:query().icon.value == icons.switch.on
-  spaces_indicator:set({
-    icon = currently_on and icons.switch.off or icons.switch.on
-  })
-end)
-
-spaces_indicator:subscribe("mouse.entered", function(env)
-  sbar.animate("tanh", 30, function()
-    spaces_indicator:set({
-      background = {
-        color = { alpha = 1.0 },
-        border_color = { alpha = 1.0 },
+  if spaces[env.INFO.space] then
+    spaces[env.INFO.space]:set({
+      label = {
+        string = icon_line,
       },
-      icon = { color = colors.bg1 },
-      label = { width = "dynamic" }
     })
-  end)
+  end
 end)
 
-spaces_indicator:subscribe("mouse.exited", function(env)
-  sbar.animate("tanh", 30, function()
-    spaces_indicator:set({
-      background = {
-        color = { alpha = 0.0 },
-        border_color = { alpha = 0.0 },
-      },
-      icon = { color = colors.grey },
-      label = { width = 0, }
-    })
-  end)
-end)
-
-spaces_indicator:subscribe("mouse.clicked", function(env)
-  sbar.trigger("swap_menus_and_spaces")
-end)
+sbar.add("item", "spaces.padding", {
+  position = "left",
+  icon = { drawing = false },
+  label = { drawing = false },
+  background = { drawing = false },
+  width = settings.group_paddings,
+})

@@ -10,7 +10,7 @@ local popup_width = 250
 
 local wifi_up = sbar.add("item", "widgets.wifi1", {
   position = "right",
-  padding_left = -5,
+  padding_left = -3,
   width = 0,
   icon = {
     padding_right = 0,
@@ -29,12 +29,16 @@ local wifi_up = sbar.add("item", "widgets.wifi1", {
     color = colors.red,
     string = "??? Bps",
   },
+  background = {
+    color = colors.transparent,
+    border_width = 0,
+  },
   y_offset = 4,
 })
 
 local wifi_down = sbar.add("item", "widgets.wifi2", {
   position = "right",
-  padding_left = -5,
+  padding_left = -3,
   icon = {
     padding_right = 0,
     font = {
@@ -52,12 +56,28 @@ local wifi_down = sbar.add("item", "widgets.wifi2", {
     color = colors.blue,
     string = "??? Bps",
   },
+  background = {
+    color = colors.transparent,
+    border_width = 0,
+  },
   y_offset = -4,
 })
 
-local wifi = sbar.add("item", "widgets.wifi.padding", {
+local wifi = sbar.add("item", "widgets.wifi", {
   position = "right",
+  icon = {
+    string = icons.wifi.connected,
+    color = colors.white,
+    font = {
+      style = settings.font.style_map["Regular"],
+      size = 14.0,
+    },
+  },
   label = { drawing = false },
+  background = {
+    color = colors.transparent,
+    border_width = 0,
+  },
 })
 
 -- Background around the item
@@ -66,7 +86,11 @@ local wifi_bracket = sbar.add("bracket", "widgets.wifi.bracket", {
   wifi_up.name,
   wifi_down.name
 }, {
-  background = { color = colors.bg1 },
+  background = {
+    color = colors.item.bg,
+    corner_radius = settings.defaults.background.corner_radius,
+    height = settings.defaults.background.height,
+  },
   popup = { align = "center", height = 30 }
 })
 
@@ -92,7 +116,7 @@ local ssid = sbar.add("item", {
     height = 2,
     color = colors.grey,
     y_offset = -15
-  }
+  },
 })
 
 local hostname = sbar.add("item", {
@@ -152,7 +176,7 @@ local router = sbar.add("item", {
   },
 })
 
-sbar.add("item", { position = "right", width = settings.group_paddings })
+sbar.add("item", "widgets.wifi.padding", { position = "right", width = settings.group_paddings - 2 })
 
 wifi_up:subscribe("network_update", function(env)
   local up_color = (env.upload == "000 Bps") and colors.grey or colors.red

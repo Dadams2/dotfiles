@@ -1,49 +1,29 @@
 local settings = require("settings")
 local colors = require("colors")
 
--- Padding item required because of bracket
-sbar.add("item", { position = "right", width = settings.group_paddings })
-
-local cal = sbar.add("item", {
+local clock = sbar.add("item", "clock", {
+  position = "right",
   icon = {
-    color = colors.white,
-    padding_left = 8,
+    string = "󰃰",
+    color = colors.item.clock,
     font = {
-      style = settings.font.style_map["Black"],
-      size = 12.0,
+      family = settings.icon_font,
+      style = settings.font.style_map["Bold"],
+      size = 15.0,
     },
   },
   label = {
     color = colors.white,
-    padding_right = 8,
-    width = 49,
-    align = "right",
-    font = { family = settings.font.numbers },
+    font = {
+      family = settings.font.text,
+      style = settings.font.style_map["Bold"],
+      size = settings.profile == "desktop" and 14.0 or 12.0,
+    },
   },
-  position = "right",
-  update_freq = 30,
-  padding_left = 1,
-  padding_right = 1,
-  background = {
-    color = colors.bg2,
-    border_color = colors.black,
-    border_width = 1
-  },
+  update_freq = 10,
   click_script = "open -a 'Calendar'"
 })
 
--- Double border for calendar using a single item bracket
-sbar.add("bracket", { cal.name }, {
-  background = {
-    color = colors.transparent,
-    height = 30,
-    border_color = colors.grey,
-  }
-})
-
--- Padding item required because of bracket
-sbar.add("item", { position = "right", width = settings.group_paddings })
-
-cal:subscribe({ "forced", "routine", "system_woke" }, function(env)
-  cal:set({ icon = os.date("%a. %d %b."), label = os.date("%H:%M") })
+clock:subscribe({ "forced", "routine", "system_woke" }, function(env)
+  clock:set({ label = os.date("%a %b %d %H:%M") })
 end)
