@@ -145,6 +145,15 @@ alias lorem="curl https://gist.githubusercontent.com/eddie-atkinson/b502aae2dc35
 alias c='clear'                             # c:            Clear terminal display
 alias v='fd --type f --hidden --exclude .git | fzf-tmux -p --reverse | xargs nvim'
 
+
+# git aliases
+alias gst='git status'
+alias gco='git checkout'
+alias gcm='git commit -m'
+alias gca='git commit --amend'
+alias gcam='git commit -am'
+alias gcb='git checkout -b'
+
 # Set PATHS
 PATH="$PATH:$HOME/.emacs.d/bin"
 PATH="$PATH:$HOME/.cargo/bin"
@@ -177,6 +186,8 @@ export FZF_TMUX_OPTS=" -p90%,70% "
 # I like the fzf default keybindings and settings but I want to keep z4h history widget
 source <(fzf --zsh)
 z4h bindkey z4h-fzf-history Ctrl+R
+
+mkd() { mkdir -p "$@" && cd "$@"; }
 
 forgejo-push() {
   repo_name=$(basename "$(git rev-parse --show-toplevel 2>/dev/null)") || return 1
@@ -259,3 +270,12 @@ PERL_MM_OPT="INSTALL_BASE=/Users/DAADAMS/perl5"; export PERL_MM_OPT;
 
 # Added by Antigravity
 export PATH="/Users/DAADAMS/.antigravity/antigravity/bin:$PATH"
+
+# Added by Antigravity CLI installer
+export PATH="/Users/DAADAMS/.local/bin:$PATH"
+
+# Added by Antigravity IDE
+export PATH="/Users/DAADAMS/.antigravity-ide/antigravity-ide/bin:$PATH"
+
+# Added by the BaseRT installer
+export PATH="/Users/DAADAMS/.basert:$PATH"
