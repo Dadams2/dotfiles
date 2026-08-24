@@ -83,13 +83,13 @@ new_workspace = "prefix+ctrl+c"
 # next_agent = ""         # optional, unset by default
 # focus_agent = ""        # optional indexed binding, e.g. "prefix+alt+1..9"
 # remote_image_paste = "ctrl+v" # only active in herdr --remote; empty disables raw-key image paste
-# new_tab = "prefix+c"
-# rename_tab = "prefix+shift+t"
+new_tab = "prefix+c"
+ rename_tab = "prefix+shift+t"
 previous_tab = "prefix+ctrl+h"
 next_tab = "prefix+ctrl+l"
-# switch_tab = "prefix+1..9"
+switch_tab = "cmd+1..9" # use cmd to navigate tabs fast
 # switch_workspace = ""   # optional indexed binding, e.g. "prefix+shift+1..9"
-# close_tab = "prefix+shift+x"
+ close_tab = "prefix+shift+x"
 # rename_pane = "prefix+shift+p"
 # edit_scrollback = "prefix+e"
 # focus_pane_left = "prefix+h"
@@ -101,10 +101,11 @@ next_tab = "prefix+ctrl+l"
 # last_pane = ""          # optional, unset by default; bind e.g. "prefix+tab" for global back-and-forth
 split_vertical = "prefix+b"
 split_horizontal = "prefix+v"
-# close_pane = "prefix+x"
+ close_pane = "prefix+x"
 # zoom = "prefix+z"       # legacy alias: fullscreen
-# resize_mode = "prefix+r"
+resize_mode = "prefix+r"
 toggle_sidebar = "prefix+m"
+copy_mode = "prefix+enter"
 
 # Navigate-mode movement. These local shortcuts win while navigate mode is open.
 # They are independent from focus_pane_*. Do not include prefix+, esc, enter, tab, or 1..9 here.
@@ -118,10 +119,10 @@ toggle_sidebar = "prefix+m"
 # Custom commands use the same binding syntax.
 # type = "shell" runs detached in the background.
 # type = "pane" opens a temporary pane and closes it when the command exits.
-# [[keys.command]]
-# key = "prefix+alt+g"
-# type = "pane"
-# command = "lazygit"
+[[keys.command]]
+key = "prefix+alt+g"
+type = "pane"
+command = "lazygit"
 
 # Legacy indexed shortcut config is still parsed for compatibility.
 # Prefer switch_tab, switch_workspace, and focus_agent for new configs.
@@ -142,6 +143,9 @@ toggle_sidebar = "prefix+m"
 
 # Maximum sidebar width when expanded (columns)
 # sidebar_max_width = 36
+
+sidebar_start_collapsed = true
+sidebar_collapsed_mode = "hidden"
 
 # Terminal width at or below which Herdr uses the mobile single-column layout.
 # Increase this for foldables, tablets, or wide phone terminals.
@@ -173,6 +177,8 @@ prompt_new_tab_name = false
 
 # Draw borders around split panes.
 pane_borders = true
+
+pane_outer_borders = false # don't need full outlines
 
 # Keep split panes visually separated instead of sharing divider borders.
 pane_gaps = false
