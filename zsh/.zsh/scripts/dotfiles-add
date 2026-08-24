@@ -1,0 +1,36 @@
+#!/usr/bin/env zsh
+# Move a ~/.config/<name> directory into the dotfiles repo as a stow package
+# (dotfiles/<name>/.config/<name>) and restow it. Usage: dotfiles-add <name>
+
+dotfiles_dir="${DOTFILES_DIR:-$HOME/dotfiles}"
+
+if [[ $# -ne 1 ]]; then
+  echo "Usage: dotfiles-add <name>" >&2
+  exit 1
+fi
+
+if ! command -v stow &>/dev/null; then
+  echo "dotfiles-add: GNU Stow is not installed" >&2
+  exit 1
+fi
+
+name=$(basename "${1%/}")
+src="$HOME/.config/$name"
+pkg_dir="$dotfiles_dir/$name/.config"
+dest="$pkg_dir/$name"
+
+if [[ ! -d "$src" ]]; then
+  echo "dotfiles-add: $src does not exist" >&2
+  exit 1
+elif [[ -L "$src" ]]; then
+  echo "dotfiles-add: $src is already a symlink (already stowed?)" >&2
+  exit 1
+elif [[ -e "$dest" ]]; then
+  echo "dotfiles-add: $dest already exists" >&2
+  exit 1
+fi
+
+mkdir -p "$pkg_dir" &&
+mv "$src" "$dest" &&
+(cd "$dotfiles_dir" && stow -v "$name" && git add "$name") &&
+echo "dotfiles-add: moved $name into $dest and restowed"

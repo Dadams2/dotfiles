@@ -56,7 +56,7 @@ z4h install ohmyzsh/ohmyzsh || return
 z4h init || return
 
 # Extend PATH.
-#path=(~/bin $path)
+path=(~/.zsh/scripts $path)
 
 # Export environment variables.
 export GPG_TTY=$TTY
