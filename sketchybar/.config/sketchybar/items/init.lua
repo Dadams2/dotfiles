@@ -1,6 +1,7 @@
 require("items.spaces")
 require("items.front_app")
 require("items.calendar")
+require("items.codex")
 require("items.widgets")
 require("items.media")
 require("items.weather")
