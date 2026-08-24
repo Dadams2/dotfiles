@@ -4,4 +4,20 @@ background-opacity=0.9
 # herdr launches on every new window/tab; if it ever exits (e.g. detach),
 # drop into a login shell instead of closing so the window stays open and
 # `herdr --remote <host>` can be run/detached from at any time.
+# herdr launches on every new window/tab; if it ever exits (e.g. detach),
+# drop into a login shell instead of closing so the window stays open and
+# `herdr --remote <host>` can be run/detached from at any time.
 command = /bin/zsh -l -c "herdr; exec /bin/zsh -l"
+
+# Ghostty's built-in cmd+1..9 tab switching would otherwise eat these
+# chords before herdr's own switch_tab binding ever sees them.
+keybind = super+1=unbind
+keybind = super+2=unbind
+keybind = super+3=unbind
+keybind = super+4=unbind
+keybind = super+5=unbind
+keybind = super+6=unbind
+keybind = super+7=unbind
+keybind = super+8=unbind
+keybind = super+9=unbind
+
