@@ -11,13 +11,14 @@ command = /bin/zsh -l -c "herdr; exec /bin/zsh -l"
 
 # Ghostty's built-in cmd+1..9 tab switching would otherwise eat these
 # chords before herdr's own switch_tab binding ever sees them.
-keybind = super+1=unbind
-keybind = super+2=unbind
-keybind = super+3=unbind
-keybind = super+4=unbind
-keybind = super+5=unbind
-keybind = super+6=unbind
-keybind = super+7=unbind
-keybind = super+8=unbind
-keybind = super+9=unbind
-
+# currently a workaround from https://github.com/ghostty-org/ghostty/discussions/8756
+keybind = command+digit_1=csi:49;9u
+keybind = command+digit_2=csi:50;9u
+keybind = command+digit_3=csi:51;9u
+keybind = command+digit_4=csi:52;9u
+keybind = command+digit_5=csi:53;9u
+keybind = command+digit_6=csi:54;9u
+keybind = command+digit_7=csi:55;9u
+keybind = command+digit_8=csi:56;9u
+keybind = command+digit_9=csi:57;9u
+keybind = command+digit_0=csi:48;9u
