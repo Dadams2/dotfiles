@@ -24,10 +24,12 @@ source "$SCRIPT_DIR/_displays.sh"
 case "$MACHINE" in
   home)
     # macbook (optional) — ultrawide — iPad (optional)
+    # Two-screen home setup (macbook + ultrawide) intentionally yields:
+    # ultrawide = spaces 1-7, macbook = spaces 8-10.
     PIN_DISPLAYS=(
-      "$HOME_MACBOOK_UUID|music:float,chat:bsp,notes:bsp,terminal:bsp"
-      "$HOME_ULTRAWIDE_UUID|web:bsp,work:bsp,code:bsp,project:bsp"
-      "$HOME_IPAD_UUID|plan:bsp,office:bsp,reference:bsp,media:float"
+      "$HOME_ULTRAWIDE_UUID|web:bsp,work:bsp,code:bsp,project:bsp,plan:bsp,office:bsp,reference:bsp"
+      "$HOME_MACBOOK_UUID|music:float,chat:bsp,notes:bsp"
+      "$HOME_IPAD_UUID|terminal:bsp,media:float"
     )
     ;;
   work)
@@ -39,9 +41,12 @@ case "$MACHINE" in
     )
     ;;
   *)
-    # Single display / laptop-only
+    # Generic fallback:
+    # - 1 display: primary spaces only
+    # - 2+ displays: primary gets 1-7, secondary gets 8-10
     PIN_DISPLAYS=(
-      "ANY|music:float,web:bsp,work:bsp,code:bsp,office:bsp,notes:bsp,terminal:bsp"
+      "ANY|music:float,web:bsp,work:bsp,code:bsp,chat:bsp,notes:bsp,terminal:bsp"
+      "SECONDARY|plan:bsp,office:bsp,reference:bsp"
     )
     ;;
 esac
@@ -80,6 +85,8 @@ main() {
   local displays_json spaces_json
   displays_json="$(yabai -m query --displays 2>/dev/null)" || { log "failed to query displays"; exit 1; }
   spaces_json="$(yabai -m query --spaces 2>/dev/null)" || { log "failed to query spaces"; exit 1; }
+  local secondary_display
+  secondary_display="$(echo "$displays_json" | jq -r '.[1].index // empty')"
 
   # --- Step 2: Build UUID → arrangement index lookup ---
   # Produces lines like: "UUID:INDEX"
@@ -103,6 +110,8 @@ main() {
     local target_display=""
     if [ "$uuid" = "ANY" ]; then
       target_display=1
+    elif [ "$uuid" = "SECONDARY" ]; then
+      target_display="$secondary_display"
     else
       # Skip empty UUIDs (not configured yet)
       [ -z "$uuid" ] && continue
@@ -237,6 +246,8 @@ main() {
       local target_display=""
       if [ "$uuid" = "ANY" ]; then
         target_display=1
+      elif [ "$uuid" = "SECONDARY" ]; then
+        target_display="$secondary_display"
       else
         [ -z "$uuid" ] && continue
         target_display="$(echo "$uuid_map" | grep "^${uuid}:" | head -1 | cut -d: -f2)"
