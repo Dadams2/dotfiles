@@ -14,6 +14,7 @@
     pager = delta # better git diff
 	preloadindex = true # load index into memory to improve perf
 	compression = 9 # trade some cpu for faster network and a little disk
+    editor = vim # nano is not what you want
 [init]
 	defaultBranch = main
 [interactive]
@@ -32,6 +33,7 @@
 	required = true
 [commit]
 	gpgsign = false
+    verbose = true
 [status]
 	branch = true
 	showStash = true
