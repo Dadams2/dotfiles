@@ -46,3 +46,6 @@ vim.o.cursorline = true
 
 -- minimum number of screen lines to keep above and below the cursor
 vim.o.scrolloff = 10
+
+-- Sync clipboard between os an Neovim
+vim.schedule(function() vim.o.clipboard = 'unnamedplus' end)
