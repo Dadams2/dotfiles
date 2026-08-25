@@ -36,3 +36,13 @@ vim.g.default_terminal = "tmux-256color"
 
 -- Enable undo/redo changes even after closing and reopening file
 vim.o.undofile = true
+
+-- configure how splits should be opened
+vim.o.splitright = true
+vim.o.splitbelow = true
+
+-- shows what line the cursor is on
+vim.o.cursorline = true
+
+-- minimum number of screen lines to keep above and below the cursor
+vim.o.scrolloff = 10
