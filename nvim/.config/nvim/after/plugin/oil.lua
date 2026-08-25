@@ -1,3 +1,3 @@
-vim.keymap.set("n", "<leader>q", ":Oil<CR>", { noremap = true, silent = true })
+vim.keymap.set("n", "<leader>o", ":Oil<CR>", { noremap = true, silent = true })
 
 
