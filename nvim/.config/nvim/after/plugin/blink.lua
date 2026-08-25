@@ -6,7 +6,7 @@ blink.setup({
         ["<C-K>"] = { "select_prev", "fallback" },
         ["<C-J>"] = { "select_next", "fallback" },
         ["<Tab>"] = { "select_next", "fallback" },
-        ["<C-U>"] = { "select_and_accept", "fallback" },
+        ["<CR>"] = { "select_and_accept", "fallback" },
         ["<C-Space"] = { "select_and_accept", "fallback" },
     },
     appearance = {
@@ -39,7 +39,7 @@ blink.setup({
 
 
     cmdline = {
-        keymap = { preset = 'inherit' },
+        keymap = { preset = 'cmdline' },
         completion = { menu = { auto_show = true } },
     },
 
