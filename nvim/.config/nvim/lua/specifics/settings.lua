@@ -8,10 +8,10 @@ vim.opt.relativenumber = true
 
 vim.smartindent = true
 
-vim.opt.guicursor = 'n-v-c:block,i-ci-ve:hor40,r-cr:hor20,o:hor50,a:blinkwait10-blinkoff5-blinkon5-Cursor'
+vim.opt.guicursor = "n-v-c:block,i-ci-ve:hor40,r-cr:hor20,o:hor50,a:blinkwait10-blinkoff5-blinkon5-Cursor"
 
 -- enable mouse mode, useful for resizing splits
-vim.opt.mouse = 'a'
+vim.opt.mouse = "a"
 
 -- tabs are superior
 vim.opt.tabstop = 4
@@ -29,8 +29,7 @@ vim.opt.incsearch = true
 vim.opt.scrolloff = 30
 vim.opt.updatetime = 50
 
-vim.opt.signcolumn = 'yes'
-
+vim.opt.signcolumn = "yes"
 
 vim.g.default_terminal = "tmux-256color"
 
@@ -44,8 +43,7 @@ vim.o.splitbelow = true
 -- shows what line the cursor is on
 vim.o.cursorline = true
 
--- minimum number of screen lines to keep above and below the cursor
-vim.o.scrolloff = 10
-
 -- Sync clipboard between os an Neovim
-vim.schedule(function() vim.o.clipboard = 'unnamedplus' end)
+vim.schedule(function()
+	vim.o.clipboard = "unnamedplus"
+end)
