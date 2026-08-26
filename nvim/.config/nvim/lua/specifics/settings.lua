@@ -47,3 +47,7 @@ vim.o.cursorline = true
 vim.schedule(function()
 	vim.o.clipboard = "unnamedplus"
 end)
+
+
+vim.o.winblend = 0
+vim.o.pumblend = 0
