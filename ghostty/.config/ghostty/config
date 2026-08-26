@@ -1,4 +1,4 @@
-theme = nord
+theme = Catppuccin Frappe
 alpha-blending = native
 background-opacity=0.9
 # herdr launches on every new window/tab; if it ever exits (e.g. detach),
