@@ -12,11 +12,9 @@ local colourSchemes = {
 	"edge",
 }
 
-vim.o.winblend = 0
 -- Make cattpucing work a bit better
 require("catppuccin").setup({
 	flavour = "frappe",
-	transparent_background = true,
 	term_colors = false,
 	integrations = {
 		treesitter = true,

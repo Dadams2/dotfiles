@@ -1,6 +1,6 @@
 theme = Catppuccin Frappe
 alpha-blending = native
-background-opacity=0.9
+background-opacity=0.95
 # macos-titlebar-style = hidden
 
 # herdr launches on every new window/tab; if it ever exits (e.g. detach),
