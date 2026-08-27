@@ -4,8 +4,10 @@ vim.g.maplocalleader =  ' '
 
 vim.keymap.set('n', 'j', 'gj')
 vim.keymap.set('n', 'k', 'gk')
-vim.keymap.set('n', '<leader>j', ":source %<CR>") 
+vim.keymap.set('n', '<leader>j', ":source %<CR>")
 
+-- Bind better escape sequence
+vim.keymap.set('i', 'jk', '<Esc>', { noremap = true, silent = true })
 
 -- make split navigation more easy
 vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
