@@ -1,0 +1,9 @@
+name = "ssh config"
+description = "open ssh config"
+working_dir = "~/.ssh"
+
+# tab 1
+[[tabs]]
+name = "config"
+command = "nvim config"
+
