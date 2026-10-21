@@ -107,6 +107,9 @@ alias l='eza -al --color=always --group-directories-first --icons=always'  # lon
 alias lst='eza -aT --color=always --group-directories-first'                # tree listing
 alias l.="eza -a | grep -e '^\.'"                                          # show only dotfiles
 
+alias c='claude'
+alias co='code'
+
 # replace cat with bat
 alias cat='bat'
 
@@ -117,6 +120,8 @@ alias gcm='git commit -m'
 alias gca='git commit --amend'
 alias gcam='git commit -am'
 alias gcb='git checkout -b'
+
+alias ssh-key-gen='ssh-keygen -t ed25519 -a 100'
 
 # zsh4humans fzf config removes the preview, force it back in
 alias fzf="fzf --style full \
