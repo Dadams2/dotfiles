@@ -12,6 +12,13 @@ if [ -n "${ZSH_VERSION-}" ]; then
   #
   #   export GOPATH=$HOME/go
   #
+  # GUI-launched, non-interactive shells must expose Homebrew to Herdr
+  # and its child commands without loading interactive shell plugins.
+  if [[ $OSTYPE == darwin* && -d /opt/homebrew/bin ]]; then
+    path=(/opt/homebrew/bin /opt/homebrew/sbin ${path:#/opt/homebrew/(bin|sbin)})
+    export PATH
+  fi
+
   # Do not change anything else in this file.
 
   : ${ZDOTDIR:=~}
