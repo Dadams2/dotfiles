@@ -2,6 +2,7 @@ require("mason").setup()
 
 vim.lsp.enable("pyright")
 vim.lsp.enable("lua_ls")
+vim.lsp.enable("gopls")
 
 vim.diagnostic.config({
     virtual_lines = true, -- this enables multi line diagnostics
