@@ -51,6 +51,14 @@ case "$MACHINE" in
     ;;
 esac
 
+# Use eight spaces whenever only one monitor is connected, including a lone
+# external monitor that would otherwise select the home or work profile.
+if [ "$(displayCount)" -eq 1 ]; then
+  PIN_DISPLAYS=(
+    "ANY|music:float,web:bsp,work:bsp,code:bsp,chat:bsp,notes:bsp,terminal:bsp,project:bsp"
+  )
+fi
+
 # --- Constants ---------------------------------------------------------------
 DEBOUNCE_FILE="/tmp/yabai-pinspaces.seq"
 DEBOUNCE_MS=80
