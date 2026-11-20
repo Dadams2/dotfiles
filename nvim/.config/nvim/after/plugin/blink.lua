@@ -7,7 +7,7 @@ blink.setup({
         ["<C-J>"] = { "select_next", "fallback" },
         ["<Tab>"] = { "select_next", "fallback" },
         ["<CR>"] = { "select_and_accept", "fallback" },
-        ["<C-Space"] = { "select_and_accept", "fallback" },
+        ["<C-Space>"] = { "select_and_accept", "fallback" },
     },
     appearance = {
         -- 'mono' (default) for 'Nerd Font Mono' or 'normal' for 'Nerd Font'

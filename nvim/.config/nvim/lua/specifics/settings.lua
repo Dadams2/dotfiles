@@ -6,7 +6,7 @@ vim.opt.number = true
 -- relative line numbers are the best
 vim.opt.relativenumber = true
 
-vim.smartindent = true
+vim.opt.smartindent = true
 
 vim.opt.guicursor = "n-v-c:block,i-ci-ve:hor40,r-cr:hor20,o:hor50,a:blinkwait10-blinkoff5-blinkon5-Cursor"
 
