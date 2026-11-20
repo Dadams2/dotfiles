@@ -1,3 +1,7 @@
 release-notes.json
-session.json
+session-snapshots/*
 herdr*
+session.json
+plugins/.locks
+plugins/github/*
+plugins/github-installations/*
