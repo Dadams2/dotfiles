@@ -127,6 +127,9 @@ alias ssh-key-gen='ssh-keygen -t ed25519 -a 100'
 alias fzf="fzf --style full \
     --preview 'fzf-preview.sh {}' --bind 'focus:transform-header:file --brief {}'"
 
+alias openports='lsof -Pnl -i'
+alias imbored="remindctl show open --list "Tasks" | shuf -n 1 | cut -f6"
+
 # Check if Neovim is installed
 if command -v nvim >/dev/null 2>&1; then
     alias vim='nvim'
